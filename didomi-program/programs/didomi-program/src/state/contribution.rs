@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
-#[anchor]
-pub struct contribution {
+#[account]
+pub struct Contribution {
     pub contributor_address: Pubkey,
     pub project_address: Pubkey,
     pub amount: u64,

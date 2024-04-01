@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 
-pub struct contributor {
+#[account]
+pub struct Contributor {
     pub total_contributions: u64,
 }
