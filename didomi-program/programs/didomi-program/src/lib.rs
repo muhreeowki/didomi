@@ -20,5 +20,9 @@ pub mod didomi_program {
         instructions::update_project_handler(ctx, data)?;
         Ok(())
     }
-}
 
+    pub fn delete_project(ctx: Context<DeleteProject>) -> Result<()> {
+        instructions::delete_project_handler(ctx)?;
+        Ok(())
+    }
+}
