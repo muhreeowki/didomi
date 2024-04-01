@@ -15,4 +15,10 @@ pub mod didomi_program {
         instructions::create_project_handler(ctx, data)?;
         Ok(())
     }
+
+    pub fn update_project(ctx: Context<UpdateProject>, data: ProjectData) -> Result<()> {
+        instructions::update_project_handler(ctx, data)?;
+        Ok(())
+    }
 }
+
