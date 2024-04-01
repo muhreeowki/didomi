@@ -1,19 +1,17 @@
 use anchor_lang::prelude::*;
 
-// Struct to represent a Donation AD
-// TODO: Figure out how to store variable string values
+// Struct to represent a Project Donation AD
 #[account]
 pub struct ProjectData {
     pub title: [u8; 120],
-    pub description: [u8; 1000],
+    pub description: [u8; 2000],
     pub target_amount: u64,
     pub current_amount: u64,
     pub start_date: [u8; 30],
     pub end_date: [u8; 30],
-    pub project_address: Pubkey,
+    pub owner_address: Pubkey,
     pub beneficiary_address: Pubkey,
-    pub contributors: [u8; 5], // Needs to store a variable list of Contributors
-    pub project_status: String,
+    pub project_status: u8,
     pub images: [[u8; 120]; 5],
     pub project_url: [u8; 120],
     pub organizer_name: [u8; 120],
