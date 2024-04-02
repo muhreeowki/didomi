@@ -15,8 +15,8 @@ pub struct CreateContribution<'info> {
     #[account(mut)]
     project_account: Account<'info, ProjectData>,
     /// CHECK: Checking that this account is the same as the one in the project provided
-    #[account(mut, address = project_account.beneficiary_address)]
-    beneficiary_account: AccountInfo<'info>,
+    #[account(mut, address = project_account.organizer_address)]
+    project_organizer: AccountInfo<'info>,
     system_program: Program<'info, System>,
 }
 
@@ -29,7 +29,7 @@ pub fn create_contribution_handler(
     let contributor = &mut ctx.accounts.contributor_account;
     let contribution = &mut ctx.accounts.contribution;
     let project = &mut ctx.accounts.project_account;
-    let beneficiary = &mut ctx.accounts.beneficiary_account;
+    let project_organizer = &mut ctx.accounts.project_organizer;
     // Intialize Contribution
     contribution.amount = amount;
     contribution.message = message;
@@ -38,14 +38,17 @@ pub fn create_contribution_handler(
     contribution.project_address = project.key();
     // Making the Donation
     // Create the transfer instruction
-    let transfer_instruction =
-        system_instruction::transfer(&contributor.key(), beneficiary.key, contribution.amount);
+    let transfer_instruction = system_instruction::transfer(
+        &contributor.key(),
+        project_organizer.key,
+        contribution.amount,
+    );
     // Invoke the transfer instruction
     anchor_lang::solana_program::program::invoke_signed(
         &transfer_instruction,
         &[
             contributor.to_account_info(),
-            beneficiary.clone(),
+            project_organizer.clone(),
             ctx.accounts.system_program.to_account_info(),
         ],
         &[],

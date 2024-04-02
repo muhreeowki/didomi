@@ -15,7 +15,7 @@ pub struct ProjectData {
     /// current_amount: The current amount donated to the project so far
     pub current_amount: u64,
     /// beneficiary_address: Wallet address of the account to recieve donations
-    pub beneficiary_address: Pubkey,
+    // pub beneficiary_address: Pubkey,
     /// _reserve: Reserved space
     pub _reserve: [u8; 32],
 }

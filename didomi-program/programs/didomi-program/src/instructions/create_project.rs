@@ -7,8 +7,6 @@ use crate::state::ProjectData;
 pub struct CreateProject<'info> {
     #[account(mut)]
     pub organizer: Signer<'info>,
-    /// CHECK: Any address is fine.
-    pub beneficiary: AccountInfo<'info>,
     #[account(init,  payer = organizer, space = size_of::<ProjectData>(), seeds = [organizer.key().as_ref()], bump)]
     pub project: Account<'info, ProjectData>,
     pub system_program: Program<'info, System>,
@@ -28,6 +26,5 @@ pub fn create_project_handler(
     project.organizer_name = organizer_name;
     project.target_amount = target_amount;
     project.organizer_address = ctx.accounts.organizer.key();
-    project.beneficiary_address = ctx.accounts.beneficiary.key();
     Ok(())
 }

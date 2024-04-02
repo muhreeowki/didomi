@@ -7,7 +7,7 @@ pub struct UpdateProject<'info> {
     #[account(mut)]
     pub organizer: Signer<'info>,
     /// CHECK: Any address is fine.
-    pub beneficiary: AccountInfo<'info>,
+    // pub beneficiary: AccountInfo<'info>,
     #[account(seeds = [organizer.key().as_ref()], bump)]
     pub project: Account<'info, ProjectData>,
     pub system_program: Program<'info, System>,
@@ -26,6 +26,6 @@ pub fn update_project_handler(
     project.organizer_name = organizer_name;
     project.target_amount = target_amount;
     project.organizer_address = ctx.accounts.organizer.key();
-    project.beneficiary_address = ctx.accounts.beneficiary.key();
+    // project.beneficiary_address = ctx.accounts.beneficiary.key();
     Ok(())
 }
