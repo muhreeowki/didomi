@@ -27,4 +27,9 @@ pub mod didomi_program {
         instructions::delete_project_handler(ctx)?;
         Ok(())
     }
+
+    pub fn create_contribution(ctx: Context<CreateContribution>, data: Contribution) -> Result<()> {
+        create_contribution_handler(ctx, data)?;
+        Ok(())
+    }
 }
