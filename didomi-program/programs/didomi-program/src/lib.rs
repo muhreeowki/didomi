@@ -16,11 +16,13 @@ pub mod didomi_program {
         Ok(())
     }
 
+    // Update project instruction
     pub fn update_project(ctx: Context<UpdateProject>, data: ProjectData) -> Result<()> {
         instructions::update_project_handler(ctx, data)?;
         Ok(())
     }
 
+    // Delete project instruction
     pub fn delete_project(ctx: Context<DeleteProject>) -> Result<()> {
         instructions::delete_project_handler(ctx)?;
         Ok(())
