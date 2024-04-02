@@ -7,7 +7,7 @@ use crate::state::ProjectData;
 pub struct CreateProject<'info> {
     #[account(mut)]
     pub organizer: Signer<'info>,
-    #[account(init,  payer = organizer, space = size_of::<ProjectData>(), seeds = [organizer.key().as_ref()], bump)]
+    #[account(init,  payer = organizer, space = 512, seeds = [organizer.key().as_ref()], bump)]
     pub project: Account<'info, ProjectData>,
     pub system_program: Program<'info, System>,
 }

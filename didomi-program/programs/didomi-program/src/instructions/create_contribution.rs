@@ -10,7 +10,7 @@ pub struct CreateContribution<'info> {
     contributor: Signer<'info>,
     #[account(init_if_needed, payer = contributor, space = 8, seeds = [contributor.key().as_ref()], bump)]
     contributor_account: Account<'info, Contributor>,
-    #[account(init, payer = contributor, space = size_of::<Contribution>(), seeds = [contributor.key().as_ref()], bump)]
+    #[account(init, payer = contributor, space = 256, seeds = [contributor.key().as_ref()], bump)]
     contribution: Account<'info, Contribution>,
     #[account(mut)]
     project_account: Account<'info, ProjectData>,
