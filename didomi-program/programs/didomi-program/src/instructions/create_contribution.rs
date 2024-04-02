@@ -22,14 +22,20 @@ pub struct CreateContribution<'info> {
 
 pub fn create_contribution_handler(
     ctx: Context<CreateContribution>,
-    data: Contribution,
+    amount: u64,
+    message: [u8; 128],
+    token_type: u8,
 ) -> Result<()> {
     let contributor = &mut ctx.accounts.contributor_account;
     let contribution = &mut ctx.accounts.contribution;
     let project = &mut ctx.accounts.project_account;
     let beneficiary = &mut ctx.accounts.beneficiary_account;
     // Intialize Contribution
-    **contribution = data;
+    contribution.amount = amount;
+    contribution.message = message;
+    contribution.token_type = token_type;
+    contribution.contributor_address = contribution.key();
+    contribution.project_address = project.key();
     // Making the Donation
     // Create the transfer instruction
     let transfer_instruction =
@@ -49,7 +55,6 @@ pub fn create_contribution_handler(
     Record Donation
     */
     project.current_amount += contribution.amount / 1000000000; // SOL
-    project.total_contributions += 1;
     contributor.total_contributions += 1;
     Ok(())
 }
