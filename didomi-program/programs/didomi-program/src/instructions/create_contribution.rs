@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use solana_program::system_instruction;
-use std::mem::size_of;
 
 use crate::{state::Contribution, Contributor, ProjectData};
 
@@ -8,9 +7,9 @@ use crate::{state::Contribution, Contributor, ProjectData};
 pub struct CreateContribution<'info> {
     #[account(mut)]
     contributor: Signer<'info>,
-    #[account(init_if_needed, payer = contributor, space = 8, seeds = [contributor.key().as_ref()], bump)]
+    #[account(init_if_needed, payer = contributor, space = 16, seeds = ["contributor".as_ref(), contributor.key().as_ref()], bump)]
     contributor_account: Account<'info, Contributor>,
-    #[account(init, payer = contributor, space = 256, seeds = [contributor.key().as_ref()], bump)]
+    #[account(init, payer = contributor, space = 256, seeds = ["contribution".as_ref(), contributor.key().as_ref()], bump)]
     contribution: Account<'info, Contribution>,
     #[account(mut)]
     project_account: Account<'info, ProjectData>,

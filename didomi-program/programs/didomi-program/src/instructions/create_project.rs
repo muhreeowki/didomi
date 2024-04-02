@@ -1,5 +1,4 @@
 use anchor_lang::prelude::*;
-use std::mem::size_of;
 
 use crate::state::ProjectData;
 
