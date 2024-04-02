@@ -14,6 +14,6 @@ pub struct UpdateProject<'info> {
 pub fn update_project_handler(ctx: Context<UpdateProject>, data: ProjectData) -> Result<()> {
     let project = &mut ctx.accounts.project;
     // Initialize Project
-    **project = data;
+    **project = ProjectData { ..data };
     Ok(())
 }

@@ -15,6 +15,6 @@ pub struct CreateProject<'info> {
 pub fn create_project_handler(ctx: Context<CreateProject>, data: ProjectData) -> Result<()> {
     let project = &mut ctx.accounts.project;
     // Initialize Project
-    **project = data;
+    **project = ProjectData { ..data };
     Ok(())
 }
