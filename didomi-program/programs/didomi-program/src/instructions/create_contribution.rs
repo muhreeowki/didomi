@@ -9,7 +9,7 @@ pub struct CreateContribution<'info> {
     contributor: Signer<'info>,
     #[account(init_if_needed, payer = contributor, space = 16, seeds = ["contributor".as_ref(), contributor.key().as_ref()], bump)]
     contributor_account: Account<'info, Contributor>,
-    #[account(init, payer = contributor, space = 256, seeds = ["contribution".as_ref(), contributor.key().as_ref()], bump)]
+    #[account(init_if_needed, payer = contributor, space = 256, seeds = ["contribution".as_ref(), contributor.key().as_ref(), project_account.key().as_ref()], bump)]
     contribution: Account<'info, Contribution>,
     #[account(mut)]
     project_account: Account<'info, ProjectData>,
@@ -30,7 +30,7 @@ pub fn create_contribution_handler(
     let project = &mut ctx.accounts.project_account;
     let project_organizer = &mut ctx.accounts.project_organizer;
     // Intialize Contribution
-    contribution.amount = amount;
+    contribution.amount += amount;
     contribution.message = message;
     contribution.token_type = token_type;
     contribution.contributor_address = contribution.key();
