@@ -13,36 +13,28 @@ pub mod didomi_program {
     // Create project instruction
     pub fn create_project(
         ctx: Context<CreateProject>,
-        title: [u8; 64],
-        description: [u8; 256],
-        organizer_name: [u8; 24],
+        id: u64,
+        name: [u8; 32],
+        start_date: i64,
+        end_date: i64,
         target_amount: u64,
+        status: u8,
     ) -> Result<()> {
-        instructions::create_project_handler(
-            ctx,
-            title,
-            description,
-            organizer_name,
-            target_amount,
-        )?;
+        create_project_handler(ctx, id, name, start_date, end_date, target_amount, status)?;
         Ok(())
     }
 
     // Update project instruction
-    pub fn update_project_handler(
+    pub fn update_project(
         ctx: Context<UpdateProject>,
-        title: [u8; 64],
-        description: [u8; 256],
-        organizer_name: [u8; 24],
+        id: u64,
+        name: [u8; 32],
+        start_date: i64,
+        end_date: i64,
         target_amount: u64,
+        status: u8,
     ) -> Result<()> {
-        instructions::update_project_handler(
-            ctx,
-            title,
-            description,
-            organizer_name,
-            target_amount,
-        )?;
+        update_project_handler(ctx, id, name, start_date, end_date, target_amount, status)?;
         Ok(())
     }
 
@@ -55,11 +47,11 @@ pub mod didomi_program {
     // Contribution instruction
     pub fn create_contribution(
         ctx: Context<CreateContribution>,
+        id: u64,
         amount: u64,
-        message: [u8; 128],
         token_type: u8,
     ) -> Result<()> {
-        instructions::create_contribution_handler(ctx, amount, message, token_type)?;
+        create_contribution_handler(ctx, id, amount, token_type)?;
         Ok(())
     }
 }

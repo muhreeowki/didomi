@@ -1,17 +1,21 @@
 use anchor_lang::prelude::*;
-
+// Struct to represent a Donation
 #[account]
 pub struct Contribution {
-    // contributor_address: The public key (Pubkey) of the contributor/donor
-    pub contributor_address: Pubkey,
-    // project_address: The public key (Pubkey) of the project receiving the contribution
-    pub project_address: Pubkey,
-    // amount: The amount of contribution/donation in the smallest unit of the token
+    /// Contribution ID
+    pub id: u64,
+    /// Contributor's public key
+    pub contributor: Pubkey,
+    /// Project's public key
+    pub project: Pubkey,
+    /// Contribution amount (in smallest token unit)
     pub amount: u64,
-    // message: A fixed-size byte array to store a message or note from the contributor
-    pub message: [u8; 128],
-    // token_type: A single byte to represent the type of token used for the contribution
+    /// Transaction hash (32 bytes)
+    pub transaction_hash: [u8; 32],
+    /// Token type
     pub token_type: u8,
-    // padding: A fixed-size byte array added to ensure proper alignment and padding
-    pub _reserve: [u8; 32],
+    /// Timestamp (24 bytes)
+    pub timestamp: [u8; 24],
+    /// Reserved space (33 bytes)
+    pub _reserve: [u8; 33],
 }

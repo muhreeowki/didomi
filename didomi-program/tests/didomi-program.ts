@@ -18,14 +18,17 @@ describe("didomi-program", () => {
     // Call Create Instruction
     const tx = await program.methods
       .createProject(
+        new anchor.BN(1),
         Array.from(anchor.utils.bytes.bs58.decode("Swagy")),
         Array.from(anchor.utils.bytes.bs58.decode("TestyTesty")),
-        Array.from(anchor.utils.bytes.bs58.decode("Johny")),
-        new anchor.BN(1000)
+        new anchor.BN(1234),
+        new anchor.BN(4321),
+        new anchor.BN(1000),
+        1
       )
       .accounts({
         project: projectDataAccount,
-        organizer: program.provider.publicKey,
+        owner: program.provider.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
       .rpc();
