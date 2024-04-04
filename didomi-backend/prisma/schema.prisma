@@ -12,3 +12,51 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Project {
+  id            Int            @id @default(autoincrement())
+  name          String
+  story         String
+  targetAmount  Int
+  currentAmount Int            @default(0)
+  startDate     DateTime       @default(now())
+  endDate       DateTime
+  ownerAddress  String
+  ownerName     String
+  mediaUrls     String[]
+  projectUrl    String
+  projectStatus ProjectStatus  @default(OPEN)
+  contributions Contribution[]
+}
+
+model Contribution {
+  id             Int         @id @default(autoincrement())
+  amount         Int
+  tokenType      TokenType   @default(SOL)
+  message        String
+  projectAddress String
+  projectId      Int         @unique
+  project        Project     @relation(fields: [projectId], references: [id])
+  contributorId  Int         @unique
+  contributor    Contributor @relation(fields: [contributorId], references: [id])
+}
+
+model Contributor {
+  id            Int            @id @default(autoincrement())
+  walletAddress String
+  contributions Contribution[]
+}
+
+enum TokenType {
+  SOL
+  BTC
+  ETH
+  NFT
+}
+
+enum ProjectStatus {
+  CLOSED
+  OPEN
+  DRAFT
+  FAILED
+}
