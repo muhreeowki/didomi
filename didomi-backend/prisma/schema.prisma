@@ -48,7 +48,7 @@ model User {
   id            Int            @id @default(autoincrement())
   walletAddress String         @unique
   contributions Contribution[]
-  projects       Project[]
+  projects      Project[]
 }
 
 model Socials {
