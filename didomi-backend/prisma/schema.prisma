@@ -24,7 +24,7 @@ model Project {
   ownerAddress  String
   ownerName     String
   mediaUrls     String[]
-  projectUrl    String
+  socials       Socials?
   projectStatus ProjectStatus  @default(OPEN)
   contributions Contribution[]
 }
@@ -45,6 +45,16 @@ model Contributor {
   id            Int            @id @default(autoincrement())
   walletAddress String
   contributions Contribution[]
+}
+
+model Socials {
+  id        Int     @id @default(autoincrement())
+  website   String?
+  twitter   String?
+  instagram String?
+  facebook  String?
+  projectId Int     @unique
+  project   Project @relation(fields: [projectId], references: [id])
 }
 
 enum TokenType {
