@@ -14,47 +14,51 @@ datasource db {
 }
 
 model Project {
-  id            Int            @id @default(autoincrement())
-  name          String
-  story         String
-  targetAmount  Int
-  currentAmount Int            @default(0)
-  startDate     DateTime       @default(now())
-  endDate       DateTime
-  ownerAddress  String
-  ownerName     String
-  mediaUrls     String[]
-  socials       Socials?
-  projectStatus ProjectStatus  @default(OPEN)
-  contributions Contribution[]
+  id             Int            @id @default(autoincrement())
+  accountAddress String         @unique
+  name           String
+  story          String
+  targetAmount   Int
+  currentAmount  Int            @default(0)
+  startDate      DateTime       @default(now())
+  endDate        DateTime
+  ownerId        String
+  ownerAddress   String
+  owner          User           @relation(fields: [ownerAddress], references: [walletAddress])
+  mediaUrls      String[]
+  socials        Socials?
+  projectStatus  ProjectStatus  @default(OPEN)
+  contributions  Contribution[]
 }
 
 model Contribution {
-  id             Int         @id @default(autoincrement())
-  amount         Int
-  tokenType      TokenType   @default(SOL)
-  message        String
-  projectAddress String
-  projectId      Int         @unique
-  project        Project     @relation(fields: [projectId], references: [id])
-  contributorId  Int         @unique
-  contributor    Contributor @relation(fields: [contributorId], references: [id])
+  id                 Int       @id @default(autoincrement())
+  accountAddress     String    @unique
+  amount             Int
+  tokenType          TokenType @default(SOL)
+  message            String
+  project            Project   @relation(fields: [projectAddress], references: [accountAddress])
+  projectId          Int
+  projectAddress     String
+  contributor        User      @relation(fields: [contributorAddress], references: [walletAddress])
+  contributorAddress String
 }
 
-model Contributor {
+model User {
   id            Int            @id @default(autoincrement())
-  walletAddress String
+  walletAddress String         @unique
   contributions Contribution[]
+  projects       Project[]
 }
 
 model Socials {
-  id        Int     @id @default(autoincrement())
-  website   String?
-  twitter   String?
-  instagram String?
-  facebook  String?
-  projectId Int     @unique
-  project   Project @relation(fields: [projectId], references: [id])
+  id             Int     @id @default(autoincrement())
+  website        String?
+  twitter        String?
+  instagram      String?
+  facebook       String?
+  projectAddress String  @unique
+  project        Project @relation(fields: [projectAddress], references: [accountAddress])
 }
 
 enum TokenType {
