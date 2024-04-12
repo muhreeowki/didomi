@@ -29,6 +29,7 @@ model Project {
   socials        Socials?
   projectStatus  ProjectStatus  @default(OPEN)
   contributions  Contribution[]
+  accepted_coins TokenType[]
 }
 
 model Contribution {
@@ -63,8 +64,12 @@ model Socials {
 
 enum TokenType {
   SOL
-  BTC
-  ETH
+  USDT
+  USDC
+  LINK
+  RNDR
+  WIF
+  JUP
   NFT
 }
 
