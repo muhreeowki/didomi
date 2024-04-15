@@ -16,16 +16,18 @@ datasource db {
 model Project {
   id             Int            @id @default(autoincrement())
   accountAddress String         @unique
-  name           String
+  title          String
   story          String
+  category       Category
   targetAmount   Int
   currentAmount  Int            @default(0)
   startDate      DateTime       @default(now())
-  endDate        DateTime
+  endDate        DateTime?
   ownerId        String
   ownerAddress   String
   owner          User           @relation(fields: [ownerAddress], references: [walletAddress])
-  mediaUrls      String[]
+  imageURL       String?
+  youtubeURL     String?
   socials        Socials?
   projectStatus  ProjectStatus  @default(OPEN)
   contributions  Contribution[]
@@ -78,4 +80,17 @@ enum ProjectStatus {
   OPEN
   DRAFT
   FAILED
+}
+
+enum Category {
+  EDUCATION
+  MEDICAL
+  MEMORIOAL
+  FAITH
+  EMERGENCY
+  NONPROFIT
+  ENVIRONMENT
+  COMMUNITY
+  CREATIVE
+  EVENT
 }
