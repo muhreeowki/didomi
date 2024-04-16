@@ -1,6 +1,8 @@
+import CallToAction from "@/components/CallToAction";
+import Discover from "@/components/Discover";
 import Image from "next/image";
 
-export default function Home() {
+const Home = () => {
   return (
     <section className="relative">
       <div className="mt-5 text-center">
@@ -11,6 +13,10 @@ export default function Home() {
           The future of Crypto Crowdfunding and Charity
         </p>
       </div>
+      <Discover />
+      <CallToAction />
     </section>
   );
-}
+};
+
+export default Home;
