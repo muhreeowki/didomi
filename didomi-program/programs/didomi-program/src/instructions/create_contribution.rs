@@ -12,7 +12,7 @@ pub struct CreateContribution<'info> {
     #[account(mut)]
     project_account: Account<'info, ProjectData>,
     /// CHECK: Checking that this account is the same as the one in the project provided
-    #[account(mut, address = project_account.owner)]
+    #[account(mut, address = project_account.owner_address)]
     project_organizer: AccountInfo<'info>,
     system_program: Program<'info, System>,
 }

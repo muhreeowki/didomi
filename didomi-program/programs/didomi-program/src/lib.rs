@@ -14,13 +14,11 @@ pub mod didomi_program {
     pub fn create_project(
         ctx: Context<CreateProject>,
         id: u64,
-        name: [u8; 32],
-        start_date: i64,
-        end_date: i64,
+        owner_id: u64,
+        title: [u8; 64],
         target_amount: u64,
-        status: u8,
     ) -> Result<()> {
-        create_project_handler(ctx, id, name, start_date, end_date, target_amount, status)?;
+        create_project_handler(ctx, id, owner_id, title, target_amount)?;
         Ok(())
     }
 
@@ -28,13 +26,11 @@ pub mod didomi_program {
     pub fn update_project(
         ctx: Context<UpdateProject>,
         id: u64,
-        name: [u8; 32],
-        start_date: i64,
-        end_date: i64,
+        owner_id: u64,
+        title: [u8; 64],
         target_amount: u64,
-        status: u8,
     ) -> Result<()> {
-        update_project_handler(ctx, id, name, start_date, end_date, target_amount, status)?;
+        update_project_handler(ctx, id, owner_id, title, target_amount)?;
         Ok(())
     }
 
