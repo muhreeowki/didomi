@@ -37,6 +37,7 @@ model Project {
 model Contribution {
   id                 Int       @id @default(autoincrement())
   accountAddress     String    @unique
+  transactionHash    String    @unique
   amount             Int
   tokenType          TokenType @default(SOL)
   message            String
