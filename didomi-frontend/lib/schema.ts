@@ -14,4 +14,6 @@ export const CreateProjectFormSchema = z.object({
   }),
   imageOrYoutubeURL: z.string().url(),
   acceptedCoin: z.string({ required_error: "Please select a coin." }),
+  ownerAddress: z.string(),
+  accountAddress: z.string(),
 });

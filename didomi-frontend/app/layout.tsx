@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -20,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className + "min-h-screen font-sans antialiased"}>
-        <Navbar />
-        <main className="container realtive">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
