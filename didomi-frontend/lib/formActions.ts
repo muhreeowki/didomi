@@ -6,7 +6,7 @@ import * as anchor from "@coral-xyz/anchor";
 
 type Inputs = z.infer<typeof CreateProjectFormSchema>;
 
-export const create = async (data: Inputs) => {
+export const createFunction = async (data: Inputs) => {
   // Call Backend Server to store project data in db.
   // Call Blockchain instruction to store project data on chain.
   const projectData = {

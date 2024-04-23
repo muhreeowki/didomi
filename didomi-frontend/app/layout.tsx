@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Button } from "@/components/ui/button";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className + "min-h-screen font-sans antialiased"}>
         {children}
+        <Toaster />
       </body>
     </html>
   );

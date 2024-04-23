@@ -12,8 +12,8 @@ export const CreateProjectFormSchema = z.object({
   targetAmount: z.coerce.number({
     required_error: "Enter your target amount.",
   }),
-  imageOrYoutubeURL: z.string().url(),
-  acceptedCoin: z.string({ required_error: "Please select a coin." }),
+  youtubeURL: z.string().url(),
+  acceptedCoins: z.string({ required_error: "Please select a coin." }),
   ownerAddress: z.string(),
   accountAddress: z.string(),
 });
