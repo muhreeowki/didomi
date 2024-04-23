@@ -20,11 +20,9 @@ describe("didomi-program", () => {
     const tx = await program.methods
       .createProject(
         new anchor.BN(1),
-        Array.from(anchor.utils.bytes.bs58.decode("Swagy")),
         new anchor.BN(1234),
+        Array.from(anchor.utils.bytes.bs58.decode("Swagy")),
         new anchor.BN(4321),
-        new anchor.BN(1000),
-        1
       )
       .accounts({
         project: projectDataAccount,

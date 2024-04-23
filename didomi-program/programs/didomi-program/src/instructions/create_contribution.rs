@@ -5,15 +5,16 @@ use crate::{state::Contribution, ProjectData};
 
 #[derive(Accounts)]
 pub struct CreateContribution<'info> {
+    #[account()]
     #[account(mut)]
-    contributor: Signer<'info>,
+    pub contributor: Signer<'info>,
     #[account(init_if_needed, payer = contributor, space = 256, seeds = ["contribution".as_ref(), contributor.key().as_ref(), project_account.key().as_ref()], bump)]
-    contribution: Account<'info, Contribution>,
+    pub contribution: Account<'info, Contribution>,
     #[account(mut)]
-    project_account: Account<'info, ProjectData>,
+    pub project_account: Account<'info, ProjectData>,
     /// CHECK: Checking that this account is the same as the one in the project provided
-    #[account(mut, address = project_account.owner_address)]
-    project_organizer: AccountInfo<'info>,
+    #[account(mut, seeds = [project_account.owner_address.as_ref(), project_account.key().as_ref()], bump)]
+    pub project_escrow: AccountInfo<'info>,
     system_program: Program<'info, System>,
 }
 
@@ -26,7 +27,7 @@ pub fn create_contribution_handler(
     let contributor = &mut ctx.accounts.contributor;
     let contribution = &mut ctx.accounts.contribution;
     let project = &mut ctx.accounts.project_account;
-    let project_organizer = &mut ctx.accounts.project_organizer;
+    let escrow = &mut ctx.accounts.project_escrow;
     // Intialize Contribution
     contribution.id = id;
     contribution.amount += amount;
@@ -35,17 +36,14 @@ pub fn create_contribution_handler(
     contribution.project = project.key();
     // Making the Donation
     // Create the transfer instruction
-    let transfer_instruction = system_instruction::transfer(
-        &contributor.key(),
-        project_organizer.key,
-        contribution.amount,
-    );
+    let transfer_instruction =
+        system_instruction::transfer(&contributor.key(), escrow.key, contribution.amount);
     // Invoke the transfer instruction
     anchor_lang::solana_program::program::invoke_signed(
         &transfer_instruction,
         &[
             contributor.to_account_info(),
-            project_organizer.clone(),
+            escrow.clone(),
             ctx.accounts.system_program.to_account_info(),
         ],
         &[],
