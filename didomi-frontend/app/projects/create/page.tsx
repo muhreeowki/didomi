@@ -26,15 +26,21 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { categories, tokens } from "@/lib/enums";
-import { create } from "@/lib/formActions";
 import { CreateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
+import axios from "axios";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as anchor from "@coral-xyz/anchor";
+import * as walletAdapterReact from "@solana/wallet-adapter-react";
+import { DidomiProgram } from "../../../../didomi-program/target/types/didomi_program";
+import idl from "../../../../didomi-program/target/idl/didomi_program.json";
+import { useToast } from "@/components/ui/use-toast";
 
 const CreateProject = () => {
+  // UI CONFIG
+  const { toast } = useToast();
   // ZOD FORM CONFIG
   type Inputs = z.infer<typeof CreateProjectFormSchema>;
   const form = useForm<Inputs>({
@@ -42,20 +48,76 @@ const CreateProject = () => {
     defaultValues: {
       title: "",
       story: "",
-      imageOrYoutubeURL: "",
-      acceptedCoin: "SOL",
+      youtubeURL: "",
+      acceptedCoins: "SOL",
       targetAmount: 0,
       category: "",
       ownerAddress: "",
       accountAddress: "",
     },
   });
+  // SOLANA CONFIG
+  const userWallet = walletAdapterReact.useAnchorWallet();
+  const { connection } = walletAdapterReact.useConnection();
+  const provider = new anchor.AnchorProvider(connection, userWallet, {});
 
-  // TODO: Find Program
-  // TODO: Figure out how to pass program and wallets to this function.
+  const create = async (data: Inputs) => {
+    // 0. Check that wallet is connected
+    if (!userWallet || !connection) {
+      toast({
+        title: "Uh oh! No wallet found.",
+        description: "Please Connect your Wallet",
+      });
+      return;
+    }
 
-  // const accountAddress: anchor.web3.PublicKey = anchor.web3.PublicKey.findProgramAddressSync(seeds, programId)
+    // 1. Check if user exists
+    const user = await axios
+      .get(`http://localhost:8000/users/${userWallet?.publicKey.toString()}`)
+      .then(async (response) => {
+        // 2. Create user if user does not exist
+        if (response.data == "") {
+          console.log("user not found, creating user...");
+          const { data } = await axios.post(`http://localhost:8000/users`, {
+            walletAddress: userWallet?.publicKey.toString(),
+          });
+          console.log(data);
+          return data;
+        } else {
+          console.log("user found, returning user...");
+          console.log(response.data);
+          return response.data;
+        }
+      })
+      .catch((err) => console.error(err));
 
+    // 3. Create Project
+    const project = await axios
+      .post("http://localhost:8000/projects", {
+        ...data,
+        acceptedCoins: [data.acceptedCoins],
+        ownerAddress: userWallet?.publicKey.toString(),
+        ownerId: String(user.id),
+      })
+      .then((response) => {
+        console.log("project created!");
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((err) => console.error(err));
+
+    // 4. Connect to Solana
+    // const program = new anchor.Program(idl, provider);
+    // const [address] = anchor.web3.PublicKey.findProgramAddressSync(
+    //   [provider.publicKey?.toBuffer()],
+    //   program.programId
+    // );
+
+    // 5. Send transaction
+    // TODO: Call createproject instruction onchain
+
+    // 6. Completed
+  };
   // PAGE TSX
   return (
     <>
@@ -160,7 +222,7 @@ const CreateProject = () => {
 
                     <FormField
                       control={form.control}
-                      name="category"
+                      name="acceptedCoins"
                       render={({ field, fieldState, formState }) => (
                         <FormItem className="col-span-2">
                           <FormLabel>Coin</FormLabel>
@@ -171,9 +233,9 @@ const CreateProject = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {tokens.map((category: string) => (
-                                <SelectItem key={category} value={category}>
-                                  {category}
+                              {tokens.map((token: string) => (
+                                <SelectItem key={token} value={token}>
+                                  {token}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -186,7 +248,7 @@ const CreateProject = () => {
 
                   <FormField
                     control={form.control}
-                    name="imageOrYoutubeURL"
+                    name="youtubeURL"
                     render={({ field, fieldState, formState }) => (
                       <FormItem>
                         <FormLabel>Youtube Link</FormLabel>
@@ -200,7 +262,6 @@ const CreateProject = () => {
                       </FormItem>
                     )}
                   />
-                  <input name="" type="text" hidden value={} />
 
                   <Button type="submit" className="w-full">
                     Create
