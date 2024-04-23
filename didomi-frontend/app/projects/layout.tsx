@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import ProjectsNavbar from "@/components/ProjectsNavbar";
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
@@ -15,10 +16,12 @@ export default function ProjectLayout({
   children: React.ReactNode;
 }>) {
   // SOLANA WALLET CONFIG
-  const endpoint = anchor.web3.clusterApiUrl("devnet");
-  const wallets = [new walletAdapterWallets.PhantomWalletAdapter()];
-  const { connection } = walletAdapterReact.useConnection();
-  const userWallet = walletAdapterReact.useWallet();
+  const solNetwork = "devnet";
+  const endpoint = useMemo(() => anchor.web3.clusterApiUrl(solNetwork), []);
+  const wallets = useMemo(
+    () => [new walletAdapterWallets.PhantomWalletAdapter()],
+    []
+  );
 
   return (
     <>
