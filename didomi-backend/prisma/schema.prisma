@@ -23,7 +23,7 @@ model Project {
   currentAmount  Int            @default(0)
   startDate      DateTime       @default(now())
   endDate        DateTime?
-  ownerId        String
+  ownerId        String?
   ownerAddress   String
   owner          User           @relation(fields: [ownerAddress], references: [walletAddress])
   imageURL       String?
@@ -31,7 +31,7 @@ model Project {
   socials        Socials?
   projectStatus  ProjectStatus  @default(OPEN)
   contributions  Contribution[]
-  accepted_coins TokenType[]
+  acceptedCoins  TokenType[]
 }
 
 model Contribution {
