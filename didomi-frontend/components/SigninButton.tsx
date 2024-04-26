@@ -70,7 +70,7 @@ const SigninButton = (props: ButtonProps, text: string) => {
     } else if (wallet.connected && status === "authenticated") {
       router.push("/dashboard");
     }
-  }, [wallet.connected]);
+  }, [wallet.connected, status]);
 
   return (
     <>
