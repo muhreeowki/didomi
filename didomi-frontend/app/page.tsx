@@ -5,7 +5,6 @@ import LandingNavbar from "@/components/LandingNavbar";
 const Home = () => {
   return (
     <>
-      <LandingNavbar />
       <main className="container realtive">
         <div className="mt-5 text-center">
           <h1 className="scroll-m-20 text-7xl md:text-8xl font-semibold tracking-wider lg:text-9xl ">

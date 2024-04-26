@@ -34,9 +34,10 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
-import { DidomiProgram } from "../../../../didomi-program/target/types/didomi_program";
-import idl from "../../../../didomi-program/target/idl/didomi_program.json";
+import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
+import idl from "../../../didomi-program/target/idl/didomi_program.json";
 import { useToast } from "@/components/ui/use-toast";
+import { ContainerIcon } from "lucide-react";
 
 const CreateProject = () => {
   // UI CONFIG
@@ -57,67 +58,58 @@ const CreateProject = () => {
     },
   });
   // SOLANA CONFIG
-  const userWallet = walletAdapterReact.useAnchorWallet();
-  const { connection } = walletAdapterReact.useConnection();
-  const provider = new anchor.AnchorProvider(connection, userWallet, {});
 
   const create = async (data: Inputs) => {
     // 0. Check that wallet is connected
-    if (!userWallet || !connection) {
-      toast({
-        title: "Uh oh! No wallet found.",
-        description: "Please Connect your Wallet",
-      });
-      return;
-    }
-
+    // if (!userWallet.connected || !connection) {
+    //   await userWallet.wallet?.adapter.connect();
+    //   return;
+    // }
+    // 0.2 Connect the user's wallet and sign them in
     // 1. Check if user exists
-    const user = await axios
-      .get(`http://localhost:8000/users/${userWallet?.publicKey.toString()}`)
-      .then(async (response) => {
-        // 2. Create user if user does not exist
-        if (response.data == "") {
-          console.log("user not found, creating user...");
-          const { data } = await axios.post(`http://localhost:8000/users`, {
-            walletAddress: userWallet?.publicKey.toString(),
-          });
-          console.log(data);
-          return data;
-        } else {
-          console.log("user found, returning user...");
-          console.log(response.data);
-          return response.data;
-        }
-      })
-      .catch((err) => console.error(err));
-
+    // const user = await axios
+    //   .get(`http://localhost:8000/users/${"1237489013471829304"}`)
+    //   .then(async (response) => {
+    //     // 2. Create user if user does not exist
+    //     if (response.data == "") {
+    //       console.log("user not found, creating user...");
+    //       const { data } = await axios.post(`http://localhost:8000/users`, {
+    //         walletAddress: "123478903214789014",
+    //       });
+    //       console.log(data);
+    //       return data;
+    //     } else {
+    //       console.log("user found, returning user...");
+    //       console.log(response.data);
+    //       return response.data;
+    //     }
+    //   })
+    //   .catch((err) => console.error(err));
     // 3. Create Project
-    const project = await axios
-      .post("http://localhost:8000/projects", {
-        ...data,
-        acceptedCoins: [data.acceptedCoins],
-        ownerAddress: userWallet?.publicKey.toString(),
-        ownerId: String(user.id),
-      })
-      .then((response) => {
-        console.log("project created!");
-        console.log(response.data);
-        return response.data;
-      })
-      .catch((err) => console.error(err));
-
+    // const project = await axios
+    //   .post("http://localhost:8000/projects", {
+    //     ...data,
+    //     acceptedCoins: [data.acceptedCoins],
+    //     ownerAddress: userWallet?.publicKey.toString(),
+    //     ownerId: String(user.id),
+    //   })
+    //   .then((response) => {
+    //     console.log("project created!");
+    //     console.log(response.data);
+    //     return response.data;
+    //   })
+    //   .catch((err) => console.error(err));
     // 4. Connect to Solana
     // const program = new anchor.Program(idl, provider);
     // const [address] = anchor.web3.PublicKey.findProgramAddressSync(
     //   [provider.publicKey?.toBuffer()],
     //   program.programId
     // );
-
     // 5. Send transaction
     // TODO: Call createproject instruction onchain
-
     // 6. Completed
   };
+
   // PAGE TSX
   return (
     <>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import logo from "../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from 'next/dynamic';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -28,6 +29,12 @@ import {
 } from "@/components/ui/collapsible";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+
+const ReactUIWalletMultiButtonDynamic = dynamic(
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
+  { ssr: false }
+);
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -67,10 +74,10 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-const LandingNavbar = () => {
+const AppNavbar = () => {
   return (
     <header className="flex container h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between">
-      <div className="min-w-fit">
+      <div className="min-w-fit flex justify-between gap-8">
         <Link className="flex items-center" href="/">
           <Image
             src={logo}
@@ -81,59 +88,65 @@ const LandingNavbar = () => {
           />
           <h1 className="font-bold tracking-wide text-2xl">DF</h1>
         </Link>
-      </div>
-      <div className=" hidden md:flex w-full">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <ListItem href="/docs" title="Introduction">
-                    Re-usable components built using Radix UI and Tailwind CSS.
-                  </ListItem>
-                  <ListItem href="/docs/installation" title="Installation">
-                    How to install dependencies and structure your app.
-                  </ListItem>
-                  <ListItem
-                    href="/docs/primitives/typography"
-                    title="Typography"
-                  >
-                    Styles for headings, paragraphs, lists...etc
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                  {components.map((component: any, i: number) => (
-                    <ListItem
-                      key={component.title}
-                      title={component.title}
-                      href={component.href}
-                    >
-                      {component.description}
+        <div className=" hidden md:flex w-full">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                    <ListItem href="/docs" title="Introduction">
+                      Re-usable components built using Radix UI and Tailwind
+                      CSS.
                     </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Documentation
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+                    <ListItem href="/docs/installation" title="Installation">
+                      How to install dependencies and structure your app.
+                    </ListItem>
+                    <ListItem
+                      href="/docs/primitives/typography"
+                      title="Typography"
+                    >
+                      Styles for headings, paragraphs, lists...etc
+                    </ListItem>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    {components.map((component: any, i: number) => (
+                      <ListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                      >
+                        {component.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/docs" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Documentation
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
       </div>
       <div className="flex justify-evenly items-center">
-        <Link href={"/projects"} className="mr-4 md:mr-0">
-          <Button>Launch App</Button>
-        </Link>
+        <ReactUIWalletMultiButtonDynamic
+          style={{
+            backgroundColor: "black",
+            borderRadius: "0.6rem",
+            width: "100%",
+            height: "%",
+          }}
+        />
         <Sheet>
           <SheetTrigger className="md:hidden">
             <Button size={"icon"}>
@@ -318,4 +331,4 @@ const PureListItem = React.forwardRef<
 });
 PureListItem.displayName = "PureListItem";
 
-export default LandingNavbar;
+export default AppNavbar;
