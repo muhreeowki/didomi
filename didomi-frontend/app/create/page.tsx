@@ -38,10 +38,16 @@ import { DidomiProgram } from "../../../didomi-program/target/types/didomi_progr
 import idl from "../../../didomi-program/target/idl/didomi_program.json";
 import { useToast } from "@/components/ui/use-toast";
 import { ContainerIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const CreateProject = () => {
+  // UTILS
+  const router = useRouter();
+
   // UI CONFIG
   const { toast } = useToast();
+
   // ZOD FORM CONFIG
   type Inputs = z.infer<typeof CreateProjectFormSchema>;
   const form = useForm<Inputs>({
@@ -54,60 +60,67 @@ const CreateProject = () => {
       targetAmount: 0,
       category: "",
       ownerAddress: "",
-      accountAddress: "",
+      accountAddress: "afhdfhaiopeiruqefdfa",
     },
   });
-  // SOLANA CONFIG
 
+  // SOLANA CONFIG
+  const wallet = walletAdapterReact.useWallet();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+
+  // MAIN FUNCTION
   const create = async (data: Inputs) => {
     // 0. Check that wallet is connected
-    // if (!userWallet.connected || !connection) {
-    //   await userWallet.wallet?.adapter.connect();
-    //   return;
-    // }
+    if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
+      return;
+    }
+    const userPubKey = wallet.publicKey.toString();
     // 0.2 Connect the user's wallet and sign them in
-    // 1. Check if user exists
-    // const user = await axios
-    //   .get(`http://localhost:8000/users/${"1237489013471829304"}`)
-    //   .then(async (response) => {
-    //     // 2. Create user if user does not exist
-    //     if (response.data == "") {
-    //       console.log("user not found, creating user...");
-    //       const { data } = await axios.post(`http://localhost:8000/users`, {
-    //         walletAddress: "123478903214789014",
-    //       });
-    //       console.log(data);
-    //       return data;
-    //     } else {
-    //       console.log("user found, returning user...");
-    //       console.log(response.data);
-    //       return response.data;
-    //     }
-    //   })
-    //   .catch((err) => console.error(err));
-    // 3. Create Project
-    // const project = await axios
-    //   .post("http://localhost:8000/projects", {
-    //     ...data,
-    //     acceptedCoins: [data.acceptedCoins],
-    //     ownerAddress: userWallet?.publicKey.toString(),
-    //     ownerId: String(user.id),
-    //   })
-    //   .then((response) => {
-    //     console.log("project created!");
-    //     console.log(response.data);
-    //     return response.data;
-    //   })
-    //   .catch((err) => console.error(err));
+    const user = await axios
+      .get(`http://localhost:8000/users/${userPubKey}`)
+      .then(async (response) => {
+        // 2. Create user if user does not exist
+        if (response.data == "") {
+          console.log("user not found, creating user...");
+          const { data } = await axios.post(`http://localhost:8000/users`, {
+            walletAddress: userPubKey,
+          });
+          console.log(data);
+          return data;
+        } else {
+          console.log("user found, returning user...");
+          console.log(response.data);
+          return response.data;
+        }
+      })
+      .catch((err) => console.error(err));
+    // 3. Create Project On Backend
+    const project = await axios
+      .post("http://localhost:8000/projects", {
+        ...data,
+        acceptedCoins: [data.acceptedCoins],
+        ownerAddress: userPubKey,
+        ownerId: String(user.id),
+      })
+      .then((response) => {
+        console.log("project created!");
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((err) => console.error(err));
     // 4. Connect to Solana
     // const program = new anchor.Program(idl, provider);
     // const [address] = anchor.web3.PublicKey.findProgramAddressSync(
     //   [provider.publicKey?.toBuffer()],
     //   program.programId
     // );
-    // 5. Send transaction
+    // 5. Create Project on Solana
     // TODO: Call createproject instruction onchain
     // 6. Completed
+    console.log("Created Project:");
+    console.log(project);
+    router.push(`/projects/${project.id}`);
   };
 
   // PAGE TSX
@@ -115,7 +128,7 @@ const CreateProject = () => {
     <>
       <main>
         <Card className="mx-auto overflow-hidden max-w-screen-lg flex justify-between">
-          <div className="w-1/2">
+          <div className="md:w-1/2 hidden md:block">
             <img
               src={
                 "https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149989169.jpg?w=996&t=st=1713183462~exp=1713184062~hmac=bdb96914d64d00bc1ebe079132cad2cd9d17107401901cc96d41047a364ed73c"
@@ -125,7 +138,7 @@ const CreateProject = () => {
             />
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <CardHeader>
               <CardTitle className="text-xl">Create Project</CardTitle>
               <CardDescription>
