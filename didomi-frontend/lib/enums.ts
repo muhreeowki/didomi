@@ -21,3 +21,10 @@ export const tokens = [
   "JUP",
   "NFT",
 ];
+
+export const projectStatus = ["CLOSED", "OPEN", "DRAFT", "FAILED"];
+
+export enum Page {
+  ProjectAnalytics,
+  ProjectEdit,
+}

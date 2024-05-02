@@ -26,11 +26,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { categories, tokens } from "@/lib/enums";
-import { CreateProjectFormSchema } from "@/lib/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
 import axios from "axios";
 import { z } from "zod";
+import { CreateProjectFormSchema } from "@/lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";

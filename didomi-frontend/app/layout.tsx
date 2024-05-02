@@ -23,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className + "min-h-screen font-sans antialiased"}>
+      <body
+        className={
+          font.className + "min-h-screen font-sans antialiased bg-background"
+        }
+      >
         <SolanaProviders>
           <NextAuthProvider>
             <AppNavbar />

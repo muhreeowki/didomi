@@ -17,3 +17,19 @@ export const CreateProjectFormSchema = z.object({
   ownerAddress: z.string(),
   accountAddress: z.string(),
 });
+
+export const UpdateProjectFormSchema = z.object({
+  title: z
+    .string({ required_error: "Please provide a title." })
+    .min(10, "Give a more descriptive title."),
+  story: z
+    .string({ required_error: "Please tell us about your project." })
+    .min(100, "Give abit more detail about your project."),
+  category: z.string({ required_error: "Please select a category." }),
+  targetAmount: z.coerce.number({
+    required_error: "Enter your target amount.",
+  }),
+  imageURL: z.string().url(),
+  acceptedCoins: z.string({ required_error: "Please select a coin." }),
+  projectStatus: z.string(),
+});
