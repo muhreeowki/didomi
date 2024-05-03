@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import logo from "../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -148,7 +148,7 @@ const AppNavbar = () => {
           }}
         />
         <Sheet>
-          <SheetTrigger className="md:hidden">
+          <SheetTrigger className="md:hidden ml-4">
             <Button size={"icon"}>
               <MenuIcon />
             </Button>

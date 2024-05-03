@@ -79,48 +79,46 @@ const ProjectAnalytics = (props: {
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
           <CardHeader className="flex flex-row items-center justify-center bg-muted/50">
-            <div className="grid gap-0.5">
-              <CardTitle className="grid text-lg gap-6 ">
-                <div className="flex flex-col justify-center gap-4 items-center">
-                  <img
-                    alt="Project image"
-                    className="aspect-square w-full rounded-md object-cover max-w-96"
-                    height="300"
-                    src={
-                      props.project.imageURL || "https://placehold.co/600x400"
-                    }
-                    width="300"
-                  />
-                  <h1 className="text-2xl font-semibold leading-none tracking-tight capitalize">
-                    {props.project ? props.project.title : "An Error Occured"}
-                  </h1>
-                </div>
-              </CardTitle>
-              <CardDescription className="flex justify-between items-center mt-3">
-                <span>Date: {props.project.startDate.split("T")[0]}</span>
-                <div className="ml-auto flex items-center gap-1">
-                  <Button size="sm" variant="outline" className="h-8 gap-1">
-                    <Truck className="h-3.5 w-3.5" />
-                    <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                      Veiw
-                    </span>
-                  </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="outline" className="h-8 w-8">
-                        <MoreVertical className="h-3.5 w-3.5" />
-                        <span className="sr-only">More</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Export</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Trash</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </CardDescription>
+            <div className="flex md:flex-col justify-between md:grid gap-0.5">
+              <img
+                alt="Project image"
+                className="aspect-square w-full rounded-md object-cover max-w-40 md:max-w-72"
+                src={props.project.imageURL || "https://placehold.co/600x400"}
+              />
+              <div className="grid gap-2 ml-4 md:ml-0 md:mt-4">
+                <CardTitle className="h-fit capitalize text-center md:text-left place-self-end md:place-self-center lg:place-self-start">
+                  {props.project ? props.project.title : "An Error Occured"}
+                </CardTitle>
+                <CardDescription className="flex flex-col md:flex-row h-fit justify-center md:justify-between items-center">
+                  <span>Date: {props.project.startDate.split("T")[0]}</span>
+                  <div className="md:ml-auto flex items-center gap-1">
+                    <Button size="sm" variant="outline" className="h-8 gap-1">
+                      <Truck className="h-3.5 w-3.5" />
+                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                        Veiw
+                      </span>
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-8 w-8"
+                        >
+                          <MoreVertical className="h-3.5 w-3.5" />
+                          <span className="sr-only">More</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>Export</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Trash</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </CardDescription>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="p-6 text-sm">
