@@ -106,7 +106,7 @@ const ProjectEditPage = (props: {
       title: props.project.title,
       story: props.project.story,
       imageURL: props.project.imageURL,
-      acceptedCoins: props.project.acceptedCoins,
+      acceptedCoins: props.project.acceptedCoins[0],
       targetAmount: props.project.targetAmount,
       category: props.project.category,
       projectStatus: props.project.projectStatus,
@@ -360,7 +360,7 @@ const ProjectEditPage = (props: {
                 <CardHeader>
                   <CardTitle>Project Image</CardTitle>
                   <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
+                    Select a beautiful captivating image.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -406,7 +406,16 @@ const ProjectEditPage = (props: {
                 </CardHeader>
                 <CardContent className="text-right">
                   <div></div>
-                  <Button size="sm" variant="destructive" className="">
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className=""
+                    type="button"
+                    onClick={async () => {
+                      await props.deleteFunc(props.project.id);
+                      router.replace("/dashboard");
+                    }}
+                  >
                     Delete Project
                   </Button>
                 </CardContent>

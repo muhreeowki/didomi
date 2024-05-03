@@ -20,11 +20,9 @@ const Project = async ({ params }: any) => {
     })
     .catch(console.error);
 
-  const handleDelete = async () => {
+  const handleDelete = async (id: string) => {
     "use server";
-    const { data } = await axios.delete(
-      `http://localhost:8000/projects/${params.id}`
-    );
+    const { data } = await axios.delete(`http://localhost:8000/projects/${id}`);
     console.log(data.data);
     redirect("/dashboard", RedirectType.replace);
   };

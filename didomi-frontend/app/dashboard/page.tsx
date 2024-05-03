@@ -5,7 +5,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import CurrentProjects from "@/components/CurrentProjects";
+import AllProjects from "@/components/AllProjects";
 import Link from "next/link";
 
 const Dashboard = () => {
@@ -36,7 +36,7 @@ const Dashboard = () => {
           <Button>Create New Project</Button>
         </Link>
       </section>
-      <CurrentProjects />
+      <AllProjects />
     </main>
   );
 };

@@ -67,6 +67,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Page } from "@/lib/enums";
+import { AspectRatio } from "./ui/aspect-ratio";
 
 const ProjectAnalytics = (props: {
   project: any;
@@ -79,12 +80,23 @@ const ProjectAnalytics = (props: {
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
           <CardHeader className="flex flex-row items-center justify-center bg-muted/50">
             <div className="grid gap-0.5">
-              <CardTitle className="group flex items-center text-lg">
-                <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight text-center">
-                  {props.project ? props.project.title : "An Error Occured"}
-                </h1>
+              <CardTitle className="grid text-lg gap-6 ">
+                <div className="flex flex-col justify-center gap-4 items-center">
+                  <img
+                    alt="Project image"
+                    className="aspect-square w-full rounded-md object-cover max-w-96"
+                    height="300"
+                    src={
+                      props.project.imageURL || "https://placehold.co/600x400"
+                    }
+                    width="300"
+                  />
+                  <h1 className="text-2xl font-semibold leading-none tracking-tight capitalize">
+                    {props.project ? props.project.title : "An Error Occured"}
+                  </h1>
+                </div>
               </CardTitle>
-              <CardDescription className="flex justify-between items-center">
+              <CardDescription className="flex justify-between items-center mt-3">
                 <span>Date: {props.project.startDate.split("T")[0]}</span>
                 <div className="ml-auto flex items-center gap-1">
                   <Button size="sm" variant="outline" className="h-8 gap-1">
