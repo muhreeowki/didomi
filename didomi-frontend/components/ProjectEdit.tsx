@@ -109,6 +109,7 @@ const ProjectEditPage = (props: {
       acceptedCoins: props.project.acceptedCoins,
       targetAmount: props.project.targetAmount,
       category: props.project.category,
+      projectStatus: props.project.projectStatus,
     },
   });
 
@@ -125,8 +126,9 @@ const ProjectEditPage = (props: {
     const userPubKey = wallet.publicKey.toString();
     // 3. Create Project On Backend
     const project = await axios
-      .patch("http://localhost:8000/projects", {
+      .patch(`http://localhost:8000/projects/${props.project.id}`, {
         ...data,
+        acceptedCoins: [data.acceptedCoins],
       })
       .then((response) => {
         console.log("project updated!");
@@ -145,7 +147,7 @@ const ProjectEditPage = (props: {
     // 6. Completed
     console.log("Created Project:");
     console.log(project);
-    router.push(`/projects/${project.id}`);
+    router.back();
   };
 
   return (
@@ -264,122 +266,53 @@ const ProjectEditPage = (props: {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[100px]">SKU</TableHead>
-                        <TableHead>Stock</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead className="w-[100px]">Size</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell className="font-semibold">
-                          GGPC-001
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="stock-1" className="sr-only">
-                            Stock
-                          </Label>
-                          <Input
-                            id="stock-1"
-                            type="number"
-                            defaultValue="100"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="price-1" className="sr-only">
-                            Price
-                          </Label>
-                          <Input
-                            id="price-1"
-                            type="number"
-                            defaultValue="99.99"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <ToggleGroup
-                            type="single"
-                            defaultValue="s"
-                            variant="outline"
+                  <div className="grid gap-6 grid-cols-5">
+                    <FormField
+                      control={form.control}
+                      name="targetAmount"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem className="col-span-3">
+                          <FormLabel>Target Amount</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              {...field}
+                              placeholder="1000"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="acceptedCoins"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem className="col-span-2">
+                          <FormLabel>Coin</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={props.project.acceptedCoins[0]}
                           >
-                            <ToggleGroupItem value="s">S</ToggleGroupItem>
-                            <ToggleGroupItem value="m">M</ToggleGroupItem>
-                            <ToggleGroupItem value="l">L</ToggleGroupItem>
-                          </ToggleGroup>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-semibold">
-                          GGPC-002
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="stock-2" className="sr-only">
-                            Stock
-                          </Label>
-                          <Input
-                            id="stock-2"
-                            type="number"
-                            defaultValue="143"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="price-2" className="sr-only">
-                            Price
-                          </Label>
-                          <Input
-                            id="price-2"
-                            type="number"
-                            defaultValue="99.99"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <ToggleGroup
-                            type="single"
-                            defaultValue="m"
-                            variant="outline"
-                          >
-                            <ToggleGroupItem value="s">S</ToggleGroupItem>
-                            <ToggleGroupItem value="m">M</ToggleGroupItem>
-                            <ToggleGroupItem value="l">L</ToggleGroupItem>
-                          </ToggleGroup>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-semibold">
-                          GGPC-003
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="stock-3" className="sr-only">
-                            Stock
-                          </Label>
-                          <Input id="stock-3" type="number" defaultValue="32" />
-                        </TableCell>
-                        <TableCell>
-                          <Label htmlFor="price-3" className="sr-only">
-                            Stock
-                          </Label>
-                          <Input
-                            id="price-3"
-                            type="number"
-                            defaultValue="99.99"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <ToggleGroup
-                            type="single"
-                            defaultValue="s"
-                            variant="outline"
-                          >
-                            <ToggleGroupItem value="s">S</ToggleGroupItem>
-                            <ToggleGroupItem value="m">M</ToggleGroupItem>
-                            <ToggleGroupItem value="l">L</ToggleGroupItem>
-                          </ToggleGroup>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Coin" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {tokens.map((token: string) => (
+                                <SelectItem key={token} value={token}>
+                                  {token}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </div>

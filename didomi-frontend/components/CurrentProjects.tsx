@@ -26,7 +26,10 @@ const CurrentProjects = async () => {
             <CardContent className="flex w-fit flex-col lg:flex-row gap-2 items-center justify-center p-0 h-fit">
               <div className="flex items-center justify-center h-fit w-full">
                 <img
-                  src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
+                  src={
+                    item.imageURL ||
+                    "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
+                  }
                   alt="Photo by Drew Beamer"
                   className="rounded-md object-cover"
                 />
