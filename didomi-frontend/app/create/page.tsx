@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
@@ -31,7 +32,7 @@ import axios from "axios";
 import { z } from "zod";
 import { CreateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldName, FieldValue, SubmitHandler, useForm } from "react-hook-form";
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
 import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
@@ -56,6 +57,7 @@ const CreateProject = () => {
       title: "",
       story: "",
       imageURL: "",
+      websiteURL: "",
       acceptedCoins: "SOL",
       targetAmount: 0,
       category: "",
@@ -64,6 +66,42 @@ const CreateProject = () => {
       accountAddress: "afhdfhaiopeiruqefdfa",
     },
   });
+
+  const [currentStep, setCurrentStep] = React.useState(0);
+  const formSteps = [
+    {
+      id: "step1",
+      name: "Info",
+      fields: ["title", "story", "category"],
+    },
+    {
+      id: "step2",
+      name: "Funding",
+      fields: ["targetAmount", "acceptedCoins"],
+    },
+    {
+      id: "step3",
+      name: "Media",
+      fields: ["imageURL", "websiteURL"],
+    },
+  ];
+
+  // Form Stepper Function
+  const nextStep = async () => {
+    const fields = formSteps[currentStep].fields;
+    const result = await form.trigger(fields as FieldName[], {
+      shouldFocus: true,
+    });
+    if (!result) return;
+    if (currentStep < 2) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   // SOLANA CONFIG
   const wallet = walletAdapterReact.useWallet();
@@ -128,133 +166,224 @@ const CreateProject = () => {
   return (
     <>
       <main>
-        <Card className="mx-auto overflow-hidden max-w-screen-md justify-between">
-          <CardHeader>
-            <CardTitle className="text-xl">Create Project</CardTitle>
-            <CardDescription>
-              Enter the following information to create a project
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form className="grid gap-4" onSubmit={form.handleSubmit(create)}>
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field, fieldState, formState }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Bob's Fundraiser" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="story"
-                  render={({ field, fieldState, formState }) => (
-                    <FormItem>
-                      <FormLabel>Your Story</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Hi, my name is bob..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field, fieldState, formState }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categories.map((category: string, i: number) => (
-                            <SelectItem key={i} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid gap-2 grid-cols-5">
-                  <FormField
-                    control={form.control}
-                    name="targetAmount"
-                    render={({ field, fieldState, formState }) => (
-                      <FormItem className="col-span-3">
-                        <FormLabel>Target Amount</FormLabel>
-                        <FormControl>
-                          <Input type="number" {...field} placeholder="1000" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="acceptedCoins"
-                    render={({ field, fieldState, formState }) => (
-                      <FormItem className="col-span-2">
-                        <FormLabel>Coin</FormLabel>
-                        <Select onValueChange={field.onChange}>
+        <Form {...form}>
+          <form
+            className="flex flex-col justify-center items-center gap-4"
+            onSubmit={form.handleSubmit(create)}
+          >
+            <h1 className="text-4xl font-semibold mb-6">Create Your Project</h1>
+            <Tabs
+              defaultValue="step1"
+              className="max-w-screen-md"
+              value={formSteps[currentStep].id}
+            >
+              <TabsList>
+                <TabsTrigger value="step1">Step 1</TabsTrigger>
+                <TabsTrigger value="step2">Step 2</TabsTrigger>
+                <TabsTrigger value="step3">Step 3</TabsTrigger>
+              </TabsList>
+              <TabsContent value="step1">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-xl">
+                      Tell us About your Project
+                    </CardTitle>
+                    <CardDescription>
+                      Write about your goals and what you plan on accomplishing.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-6">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem>
+                          <FormLabel>Title</FormLabel>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a Coin" />
-                            </SelectTrigger>
+                            <Input placeholder="Bob's Fundraiser" {...field} />
                           </FormControl>
-                          <SelectContent>
-                            {tokens.map((token: string) => (
-                              <SelectItem key={token} value={token}>
-                                {token}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="story"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem>
+                          <FormLabel>Your Story</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Hi, my name is bob..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <Select onValueChange={field.onChange}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Category" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {categories.map((category: string, i: number) => (
+                                <SelectItem key={i} value={category}>
+                                  {category}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-end">
+                      <Button type="button" className="" onClick={nextStep}>
+                        Continue
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="step2">
+                <Card className="mx-auto overflow-hidden max-w-screen-md justify-between">
+                  <CardHeader>
+                    <CardTitle className="text-xl">What do you need?</CardTitle>
+                    <CardDescription>
+                      Enter the amount and token type that you need to achieve
+                      your Goals.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-6">
+                    <FormField
+                      control={form.control}
+                      name="targetAmount"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem className="">
+                          <FormLabel>Target Amount</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              {...field}
+                              placeholder="1000"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="imageURL"
-                  render={({ field, fieldState, formState }) => (
-                    <FormItem>
-                      <FormLabel>Image Link</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://youtu.be/..." />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name="acceptedCoins"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem className="">
+                          <FormLabel>Token</FormLabel>
+                          <Select onValueChange={field.onChange}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Token" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {tokens.map((token: string) => (
+                                <SelectItem key={token} value={token}>
+                                  {token}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <Button type="submit" className="w-full">
-                  Create
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                    <div className="flex justify-between">
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        className=""
+                        onClick={prevStep}
+                      >
+                        Back
+                      </Button>
+                      <Button type="button" className="" onClick={nextStep}>
+                        Continue
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="step3">
+                <Card className="mx-auto overflow-hidden max-w-screen-md justify-between">
+                  <CardHeader>
+                    <CardTitle className="text-xl">Media</CardTitle>
+                    <CardDescription>
+                      Provide an Image and website link so that people can know
+                      more about your project.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-6">
+                    <FormField
+                      control={form.control}
+                      name="imageURL"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem>
+                          <FormLabel>Image Link</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="https://youtu.be/..."
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="websiteURL"
+                      render={({ field, fieldState, formState }) => (
+                        <FormItem>
+                          <FormLabel>Project Link</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="https://youtu.be/..."
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-between">
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        className=""
+                        onClick={prevStep}
+                      >
+                        Back
+                      </Button>
+                      <Button type="submit" className="">
+                        Finish
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </form>
+        </Form>
       </main>
     </>
   );
