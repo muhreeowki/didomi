@@ -16,6 +16,7 @@ export const CreateProjectFormSchema = z.object({
   acceptedCoins: z.string({ required_error: "Please select a coin." }),
   ownerAddress: z.string(),
   accountAddress: z.string(),
+  escrowAddress: z.string(),
 });
 
 export const UpdateProjectFormSchema = z.object({

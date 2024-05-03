@@ -16,6 +16,7 @@ datasource db {
 model Project {
   id             Int            @id @default(autoincrement())
   accountAddress String         @unique
+  escrowAddress  String         @unique
   title          String
   story          String
   category       Category
@@ -26,12 +27,13 @@ model Project {
   ownerId        String?
   ownerAddress   String
   owner          User           @relation(fields: [ownerAddress], references: [walletAddress])
-  imageURL       String?
-  youtubeURL     String?
-  socials        Socials?
+  imageURL       String
+  websiteURL     String?
   projectStatus  ProjectStatus  @default(OPEN)
   contributions  Contribution[]
   acceptedCoins  TokenType[]
+  // socials        Socials?
+  // Socials        Socials?
 }
 
 model Contribution {
@@ -41,6 +43,7 @@ model Contribution {
   amount             Int
   tokenType          TokenType @default(SOL)
   message            String
+  date               DateTime  @default(now())
   project            Project   @relation(fields: [projectAddress], references: [accountAddress])
   projectId          Int
   projectAddress     String
@@ -53,16 +56,6 @@ model User {
   walletAddress String         @unique
   contributions Contribution[]
   projects      Project[]
-}
-
-model Socials {
-  id             Int     @id @default(autoincrement())
-  website        String?
-  twitter        String?
-  instagram      String?
-  facebook       String?
-  projectAddress String  @unique
-  project        Project @relation(fields: [projectAddress], references: [accountAddress])
 }
 
 enum TokenType {
@@ -95,3 +88,13 @@ enum Category {
   CREATIVE
   EVENT
 }
+
+// model Socials {
+//   id             Int     @id @default(autoincrement())
+//   website        String?
+//   twitter        String?
+//   instagram      String?
+//   facebook       String?
+//   projectAddress String  @unique
+//   project        Project @relation(fields: [projectAddress], references: [accountAddress])
+// }
