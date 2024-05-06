@@ -18,20 +18,20 @@ const AllProjects = async () => {
     <section className="col-span-12 mt-14 grid grid-cols-8 gap-8 place-self-center">
       {data.map((item: any) => (
         <Link
-          href={`/projects/${item.id}`}
+          href={`/dashboard/project/${item.id}`}
           key={item.id}
-          className="col-span-4 transition-all scale-80 lg:scale-100 lg:hover:scale-95"
+          className="w-fit max-w-xs lg:max-w-lg col-span-4 transition-all scale-80 lg:scale-100 lg:hover:scale-95"
         >
           <Card>
-            <CardContent className="flex w-fit flex-col lg:flex-row gap-2 items-center justify-center p-0 h-fit">
-              <div className="flex items-center justify-center h-fit w-full">
+            <CardContent className="flex flex-col lg:flex-row gap-2 items-center justify-between p-0 ">
+              <div className="flex items-center justify-center w-full">
                 <img
                   src={
                     item.imageURL ||
                     "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
                   }
                   alt="Photo by Drew Beamer"
-                  className="aspect-square rounded-md object-cover"
+                  className="aspect-square  w-full lg:max-w-[200px] rounded-md object-cover"
                 />
               </div>
               <Card className="border-none w-full">

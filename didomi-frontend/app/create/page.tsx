@@ -62,8 +62,8 @@ const CreateProject = () => {
       targetAmount: 0,
       category: "",
       ownerAddress: "",
-      escrowAddress: "afhdfhaiopeiruqefdfa",
-      accountAddress: "afhdfhaiopeiruqefdfa",
+      escrowAddress: "adfgjuyfhgrwtrtopeiruqefdfa",
+      accountAddress: "adfgjuyfhgrwtrtopeiruqefdfa",
     },
   });
 

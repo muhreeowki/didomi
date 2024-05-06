@@ -4,7 +4,10 @@ import ProjectAnalytics from "./ProjectAnalytics";
 import ProjectEditPage from "./ProjectEdit";
 import { Page } from "@/lib/enums";
 
-const ProjectDashboard = (props: { project: any; deleteFunc: Function }) => {
+const ProjectDashboard = (props: {
+  project: any;
+  deleteFunc: Function;
+}): React.JSX.Element => {
   const [page, setPage] = React.useState<Page>(Page.ProjectAnalytics);
 
   return page == Page.ProjectEdit ? (

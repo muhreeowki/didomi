@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import AllProjects from "@/components/AllProjects";
 import Link from "next/link";
 
-const Dashboard = () => {
+const UserDashboard = () => {
   const wallet = walletAdapterReact.useWallet();
   const walletModal = useWalletModal();
   const router = useRouter();
@@ -41,4 +41,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default UserDashboard;
