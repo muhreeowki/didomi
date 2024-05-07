@@ -11,7 +11,7 @@ didomi_program = "4f8xSv3wUdYUe2z343s4M2WRH7Hy2zr7Mdmpi31Y59bY"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "/Users/muh/.config/solana/id.json"
 
 [scripts]

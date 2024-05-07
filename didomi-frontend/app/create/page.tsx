@@ -27,20 +27,24 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { categories, tokens } from "@/lib/enums";
+import { useToast } from "@/components/ui/use-toast";
+import { ContainerIcon } from "lucide-react";
 import * as React from "react";
+
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 import { z } from "zod";
 import { CreateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldName, FieldValue, SubmitHandler, useForm } from "react-hook-form";
+
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
+import * as web3 from "@solana/web3.js";
 import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
 import idl from "../../../didomi-program/target/idl/didomi_program.json";
-import { useToast } from "@/components/ui/use-toast";
-import { ContainerIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const CreateProject = () => {
   // UTILS
@@ -51,6 +55,7 @@ const CreateProject = () => {
 
   // ZOD FORM CONFIG
   type Inputs = z.infer<typeof CreateProjectFormSchema>;
+  const [currentStep, setCurrentStep] = React.useState(0);
   const form = useForm<Inputs>({
     resolver: zodResolver(CreateProjectFormSchema),
     defaultValues: {
@@ -66,8 +71,6 @@ const CreateProject = () => {
       accountAddress: "adfgjuyfhgrwtrtopeiruqefdfa",
     },
   });
-
-  const [currentStep, setCurrentStep] = React.useState(0);
   const formSteps = [
     {
       id: "step1",
@@ -85,8 +88,7 @@ const CreateProject = () => {
       fields: ["imageURL", "websiteURL"],
     },
   ];
-
-  // Form Stepper Function
+  // Form Functions
   const nextStep = async () => {
     const fields = formSteps[currentStep].fields;
     const result = await form.trigger(fields as FieldName[], {
@@ -105,6 +107,16 @@ const CreateProject = () => {
 
   // SOLANA CONFIG
   const wallet = walletAdapterReact.useWallet();
+  const userWallet = walletAdapterReact.useAnchorWallet();
+  const { connection } = walletAdapterReact.useConnection();
+  const programID = new web3.PublicKey(idl.address);
+
+  const getProvider = () => {
+    if (!userWallet) return null;
+    return new anchor.AnchorProvider(connection, userWallet, {
+      preflightCommitment: "processed",
+    });
+  };
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
@@ -114,8 +126,26 @@ const CreateProject = () => {
     if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
       return;
     }
+    // 1. Connect to Solana
     const userPubKey = wallet.publicKey.toString();
-    // 0.2 Connect the user's wallet and sign them in
+    const provider = getProvider();
+    if (!provider) {
+      console.error("Provider is not available.");
+      return;
+    }
+    const program = new anchor.Program<DidomiProgram>(
+      idl as DidomiProgram,
+      provider
+    );
+    const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer()],
+      program.programId
+    );
+    const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
+      program.programId
+    );
+    // 2. Connect the user's wallet and sign them in
     const user = await axios
       .get(`http://localhost:8000/users/${userPubKey}`)
       .then(async (response) => {
@@ -134,10 +164,12 @@ const CreateProject = () => {
         }
       })
       .catch((err) => console.error(err));
-    // 3. Create Project On Backend
+    // 3. Create Project On Backend Server
     const project = await axios
       .post("http://localhost:8000/projects", {
         ...data,
+        accountAddress: projectAddress.toString(),
+        escrowAddress: escrowAddress.toString(),
         acceptedCoins: [data.acceptedCoins],
         ownerAddress: userPubKey,
         ownerId: String(user.id),
@@ -148,18 +180,45 @@ const CreateProject = () => {
         return response.data;
       })
       .catch((err) => console.error(err));
-    // 4. Connect to Solana
-    // const program = new anchor.Program(idl, provider);
-    // const [address] = anchor.web3.PublicKey.findProgramAddressSync(
-    //   [provider.publicKey?.toBuffer()],
-    //   program.programId
-    // );
-    // 5. Create Project on Solana
-    // TODO: Call createproject instruction onchain
-    // 6. Completed
-    console.log("Created Project:");
-    console.log(project);
-    router.push(`/projects/${project.id}`);
+
+    if (!project) {
+      console.error("Unable to Create Project.");
+      return;
+    }
+
+    // 4. Create Project on Solana
+    try {
+      const encoder = new TextEncoder();
+      const titleBytes = encoder.encode(project.title as string);
+      const projectTitle = new Uint8Array(64);
+      projectTitle.set(titleBytes, 0);
+      for (let i: number = titleBytes.length; i < 64; i++) {
+        projectTitle[i] = 0;
+      }
+      const tx = await program.methods
+        .createProject(
+          new anchor.BN(project.id),
+          new anchor.BN(project.ownerId),
+          Array.from(projectTitle),
+          new anchor.BN(project.targetAmount)
+        )
+        .accountsStrict({
+          owner: userWallet?.publicKey,
+          project: projectAddress,
+          escrow: escrowAddress,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc();
+      // 6. Completed
+      console.log("Created Project:");
+      console.log(project);
+      console.log("Transaction Hash");
+      console.log(tx);
+      router.push(`/projects/${project.id}`);
+    } catch (error) {
+      console.error(error);
+      return;
+    }
   };
 
   // PAGE TSX
