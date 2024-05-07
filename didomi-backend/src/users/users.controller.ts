@@ -29,6 +29,11 @@ export class UsersController {
     return this.usersService.findOne(walletAddress);
   }
 
+  @Get('/projects/:walletAddress')
+  findUserProjects(@Param('walletAddress') walletAddress: string) {
+    return this.usersService.findOne(walletAddress).projects();
+  }
+
   @Patch(':walletAddress')
   update(
     @Param('walletAddress') walletAddress: string,

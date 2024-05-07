@@ -92,12 +92,14 @@ const ProjectAnalytics = (props: {
                 <CardDescription className="flex flex-col md:flex-row h-fit justify-center md:justify-between items-center">
                   <span>Date: {props.project.startDate.split("T")[0]}</span>
                   <div className="md:ml-auto flex items-center gap-1">
-                    <Button size="sm" variant="outline" className="h-8 gap-1">
-                      <Truck className="h-3.5 w-3.5" />
-                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                        Veiw
-                      </span>
-                    </Button>
+                    <Link href={`/projects/${props.project.id}`}>
+                      <Button size="sm" variant="outline" className="h-8 gap-1">
+                        <Truck className="h-3.5 w-3.5" />
+                        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                          Veiw
+                        </span>
+                      </Button>
+                    </Link>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button

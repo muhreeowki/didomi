@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Link from "next/link";
@@ -10,11 +11,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import getUserProjects from "@/hooks/getUserProjects";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
 const AllProjects = async () => {
-  const { data } = await axios.get("http://localhost:8000/projects");
+  const wallet = useAnchorWallet();
+  const data = wallet
+    ? await getUserProjects(wallet?.publicKey.toString())
+    : null;
 
-  return (
+  return data ? (
     <section className="col-span-12 mt-14 grid grid-cols-8 gap-8 place-self-center">
       {data.map((item: any) => (
         <Link
@@ -54,6 +60,8 @@ const AllProjects = async () => {
         </Link>
       ))}
     </section>
+  ) : (
+    <div>ERROR</div>
   );
 };
 
