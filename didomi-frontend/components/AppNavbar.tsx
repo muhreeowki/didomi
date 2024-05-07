@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import SignInButton from "./SignInButton";
 
 const ReactUIWalletMultiButtonDynamic = dynamic(
   async () =>
@@ -74,7 +75,7 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-const AppNavbar = () => {
+const Navbar = () => {
   return (
     <header className="flex container h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between">
       <div className="min-w-fit flex justify-between gap-8">
@@ -147,6 +148,7 @@ const AppNavbar = () => {
             height: "%",
           }}
         />
+        <SignInButton />
         <Sheet>
           <SheetTrigger className="md:hidden ml-4">
             <Button size={"icon"}>
@@ -331,4 +333,4 @@ const PureListItem = React.forwardRef<
 });
 PureListItem.displayName = "PureListItem";
 
-export default AppNavbar;
+export default Navbar;

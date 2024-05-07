@@ -6,8 +6,9 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { Toaster } from "@/components/ui/toaster";
 import SolanaProviders from "../providers/SolanaProviders";
 import { SessionProvider } from "next-auth/react";
-import AppNavbar from "@/components/AppNavbar";
+import Navbar from "@/components/AppNavbar";
 import NextAuthProvider from "@/providers/NextAuthProvider";
+import { DidomiProvider } from "@/context";
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -30,8 +31,10 @@ export default function RootLayout({
       >
         <SolanaProviders>
           <NextAuthProvider>
-            <AppNavbar />
-            <main className="mt-6 container realtive">{children}</main>
+            <DidomiProvider>
+              <Navbar />
+              <main className="mt-6 container realtive">{children}</main>
+            </DidomiProvider>
           </NextAuthProvider>
         </SolanaProviders>
         <Toaster />
