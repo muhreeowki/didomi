@@ -62,6 +62,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
 import React from "react";
 import axios from "axios";
@@ -102,10 +103,13 @@ const Project = async ({ params }: any) => {
             </AlertDialog>
           </header>
           <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
-              <img
+            <div className="relative flex flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+              <Image
                 src={project.imageURL}
-                className="rounded-xl aspect-square"
+                alt={project.title}
+                fill
+                sizes={"100%"}
+                className="rounded-xl aspect-video"
               />
             </div>
             <div
