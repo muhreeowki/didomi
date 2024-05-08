@@ -58,67 +58,49 @@ const SignInButton = () => {
 
   const handleSignMessage = async () => {
     if (!wallet.publicKey || !csrf || !wallet.signMessage) return;
-    const message = new SigninMessage({
-      domain: window.location.host,
-      publicKey: wallet.publicKey?.toBase58(),
-      statement: `Sign this message to sign in to the app.`,
-      nonce: csrf,
-    });
-
-    const data = new TextEncoder().encode(message.prepare());
-    const signature = await wallet.signMessage(data).catch(console.error);
-    if (!signature) {
-      await wallet.disconnect();
-      return;
-    }
-    const serializedSignature = bs58.encode(signature);
-    await signIn("credentials", {
-      message: JSON.stringify(message),
-      redirect: false,
-      signature: serializedSignature,
-    });
-    if (status === "loading") {
-      while (true) {
-        if (status != "loading") {
-          setSignedIn(status === "authenticated");
-          break;
-        }
+    try {
+      const message = new SigninMessage({
+        domain: window.location.host,
+        publicKey: wallet.publicKey?.toBase58(),
+        statement: `Sign this message to sign in to the app.`,
+        nonce: csrf,
+      });
+      const data = new TextEncoder().encode(message.prepare());
+      const signature = await wallet.signMessage(data).catch(console.error);
+      if (!signature) {
+        await handleSignOut();
+        return;
       }
-    } else {
-      setSignedIn(status === "authenticated");
+      const serializedSignature = bs58.encode(signature);
+      await signIn("credentials", {
+        message: JSON.stringify(message),
+        redirect: false,
+        signature: serializedSignature,
+      });
+      return true;
+    } catch (error) {
+      await handleSignOut();
     }
-    return true;
   };
 
   const handleSignOut = async () => {
     await wallet.disconnect();
     await signOut();
-    if (status === "loading") {
-      while (true) {
-        if (status != "loading") {
-          setSignedIn(status === "authenticated");
-          break;
-        }
-      }
-    } else {
-      setSignedIn(status === "authenticated");
-    }
   };
 
   React.useEffect(() => {
-    if (wallet.connected && !signedIn && !signInWindowOpen) {
+    if (wallet.connected && !session && !signInWindowOpen) {
       setSignInWindowOpen(true);
     }
-  }, [wallet.connected, signedIn]);
+  }, [wallet.connected, session]);
 
   return (
     <>
-      {signedIn ? (
+      {session?.user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
-              Profile
+            <Button variant="secondary" size="icon" className="mr-4">
+              <CircleUser className="h-6 w-6" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -130,9 +112,12 @@ const SignInButton = () => {
             <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      ) : (
+      )}
+      {!session && (
         <>
-          <Button onClick={handleConnectWallet}>Connect Wallet</Button>
+          <Button onClick={handleConnectWallet} className="mr-4">
+            Connect Wallet
+          </Button>
         </>
       )}
       <Dialog open={signInWindowOpen} onOpenChange={setSignInWindowOpen}>

@@ -140,17 +140,17 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex justify-evenly items-center">
-        <ReactUIWalletMultiButtonDynamic
+        {/* <ReactUIWalletMultiButtonDynamic
           style={{
             backgroundColor: "black",
             borderRadius: "0.6rem",
             width: "100%",
             height: "%",
           }}
-        />
+        /> */}
         <SignInButton />
         <Sheet>
-          <SheetTrigger className="md:hidden ml-4">
+          <SheetTrigger className="md:hidden">
             <Button size={"icon"}>
               <MenuIcon />
             </Button>

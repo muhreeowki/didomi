@@ -10,8 +10,17 @@ import { SigninMessage } from "@/utils/SigninMessage";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 import { useRouter } from "next/navigation";
+import { useDidomiContext } from "@/context";
 
 const Home = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  React.useEffect(() => {
+    if (session) {
+      router.push("/dashboard");
+    }
+  }, [session]);
+
   return (
     <>
       <main className="container realtive">
