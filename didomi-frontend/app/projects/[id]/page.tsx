@@ -62,6 +62,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 
 import React from "react";
@@ -102,101 +103,40 @@ const Project = async ({ params }: any) => {
               </AlertDialogContent>
             </AlertDialog>
           </header>
-          <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="relative flex flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+          <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-4 lg:grid-cols-5">
+            <div className="relative h-[450px] lg:h-full w-full flex flex-col rounded-xl bg-muted/50 p-4 col-span-full lg:col-span-3 overflow-hidden">
               <Image
                 src={project.imageURL}
                 alt={project.title}
                 fill
                 sizes={"100%"}
-                className="rounded-xl aspect-video"
+                style={{ objectFit: "cover" }}
               />
             </div>
             <div
-              className="flex flex-row md:flex-col items-start gap-8 col-span-2"
+              className="flex flex-row md:flex-col items-start gap-8 col-span-full lg:col-span-2"
               x-chunk="dashboard-03-chunk-0"
             >
               <div className="grid w-full items-start gap-6">
                 <div className="grid gap-6 rounded-lg border p-4">
-                  <legend className="-ml-1 px-1 text-sm font-medium">
-                    Settings
-                  </legend>
-                  <div className="grid gap-3">
-                    <Label htmlFor="model">Model</Label>
-                    <Select>
-                      <SelectTrigger
-                        id="model"
-                        className="items-start [&_[data-description]]:hidden"
-                      >
-                        <SelectValue placeholder="Select a model" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="genesis">
-                          <div className="flex items-start gap-3 text-muted-foreground">
-                            <Rabbit className="size-5" />
-                            <div className="grid gap-0.5">
-                              <p>
-                                Neural{" "}
-                                <span className="font-medium text-foreground">
-                                  Genesis
-                                </span>
-                              </p>
-                              <p className="text-xs" data-description>
-                                Our fastest model for general use cases.
-                              </p>
-                            </div>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="explorer">
-                          <div className="flex items-start gap-3 text-muted-foreground">
-                            <Bird className="size-5" />
-                            <div className="grid gap-0.5">
-                              <p>
-                                Neural{" "}
-                                <span className="font-medium text-foreground">
-                                  Explorer
-                                </span>
-                              </p>
-                              <p className="text-xs" data-description>
-                                Performance and speed for efficiency.
-                              </p>
-                            </div>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="quantum">
-                          <div className="flex items-start gap-3 text-muted-foreground">
-                            <Turtle className="size-5" />
-                            <div className="grid gap-0.5">
-                              <p>
-                                Neural{" "}
-                                <span className="font-medium text-foreground">
-                                  Quantum
-                                </span>
-                              </p>
-                              <p className="text-xs" data-description>
-                                The most powerful model for complex
-                                computations.
-                              </p>
-                            </div>
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="gap-2">
+                    <span className="flex items-center justify-start">
+                      <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                        {project.currentAmount} {project.acceptedCoins[0]}
+                      </h2>
+                      <p className="leading-7 text-foreground ml-1">
+                        raised of {project.targetAmount}{" "}
+                        {project.acceptedCoins[0]} goal
+                      </p>
+                    </span>
+                    <span className="flex flex-row md:flex-col gap-1">
+                      <Progress value={33} />
+                      <p className="leading-7 text-foreground md:ml-auto">
+                        10K donations
+                      </p>
+                    </span>
                   </div>
-                  <div className="grid gap-3">
-                    <Label htmlFor="temperature">Temperature</Label>
-                    <Input id="temperature" type="number" placeholder="0.4" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-p">Top P</Label>
-                      <Input id="top-p" type="number" placeholder="0.7" />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Top K</Label>
-                      <Input id="top-k" type="number" placeholder="0.0" />
-                    </div>
-                  </div>
+                  <Button>Donate Now</Button>
                 </div>
                 <div className="grid gap-6 rounded-lg border p-4">
                   <legend className="-ml-1 px-1 text-sm font-medium">
@@ -226,7 +166,7 @@ const Project = async ({ params }: any) => {
                 </div>
               </div>
             </div>
-            <div className="w-full col-span-full bg-background">
+            <div className="w-full col-span-full lg:col-span-3 bg-background">
               <Card>
                 <CardHeader>
                   <CardTitle>About</CardTitle>
