@@ -32,7 +32,7 @@ const AllProjects = async () => {
           >
             <Card>
               <CardContent className="flex flex-col lg:flex-row gap-2 items-center justify-between p-0 ">
-                <div className="flex w-full aspect-square rounded-md relative items-center justify-center">
+                <div className="relative w-full h-full aspect-square rounded-md items-center justify-center overflow-hidden">
                   <Image
                     src={
                       item.imageURL ||
@@ -40,9 +40,8 @@ const AllProjects = async () => {
                     }
                     alt={item.title}
                     fill
-                    sizes="100%"
                     style={{
-                      objectFit: "contain",
+                      objectFit: "cover",
                     }}
                   />
                 </div>

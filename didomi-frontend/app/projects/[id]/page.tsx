@@ -104,7 +104,7 @@ const Project = async ({ params }: any) => {
             </AlertDialog>
           </header>
           <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-4 lg:grid-cols-5">
-            <div className="relative h-[450px] lg:h-full w-full flex flex-col rounded-xl bg-muted/50 p-4 col-span-full lg:col-span-3 overflow-hidden">
+            <div className="relative h-[350px] md:h-[450px] lg:h-full w-full flex flex-col rounded-xl bg-muted/50 p-4 col-span-full lg:col-span-3 overflow-hidden">
               <Image
                 src={project.imageURL}
                 alt={project.title}
