@@ -78,18 +78,21 @@ const ProjectAnalytics = (props: {
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
+          <div className="relative aspect-square w-full object-cover max-h-64 overflow-hidden">
+            <Image
+              src={props.project.imageURL || "https://placehold.co/600x400"}
+              alt="Project image"
+              fill
+              style={{ objectFit: "cover" }}
+            />
+          </div>
           <CardHeader className="flex flex-row items-center justify-center bg-muted/50">
             <div className="flex md:flex-col justify-between md:grid gap-0.5">
-              <img
-                alt="Project image"
-                className="aspect-square w-full rounded-md object-cover max-w-40 md:max-w-72"
-                src={props.project.imageURL || "https://placehold.co/600x400"}
-              />
               <div className="grid gap-2 ml-4 md:ml-0 md:mt-4">
                 <CardTitle className="h-fit capitalize text-center md:text-left place-self-end md:place-self-center lg:place-self-start">
                   {props.project ? props.project.title : "An Error Occured"}
                 </CardTitle>
-                <CardDescription className="flex flex-col md:flex-row h-fit justify-center md:justify-between items-center">
+                <CardDescription className="flex flex-col md:flex-row h-fit justify-center md:justify-between items-center gap-2">
                   <span>Date: {props.project.startDate.split("T")[0]}</span>
                   <div className="md:ml-auto flex items-center gap-1">
                     <Link href={`/projects/${props.project.id}`}>

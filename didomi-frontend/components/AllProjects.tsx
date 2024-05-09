@@ -1,13 +1,10 @@
 "use client";
-import axios from "axios";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 import Link from "next/link";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,15 +20,15 @@ const AllProjects = async () => {
 
   return (
     data && (
-      <section className="col-span-12 mt-14 grid grid-cols-8 gap-8 place-self-center">
+      <section className="col-span-12 mt-14 grid grid-cols-4 gap-8 place-self-center">
         {data.map((item: any) => (
           <Link
             href={`/dashboard/project/${item.id}`}
             key={item.id}
-            className="w-fit max-w-xs lg:max-w-lg col-span-4 transition-all scale-80 lg:scale-100 lg:hover:scale-95"
+            className="w-full h-full max-w-xs lg:max-w-lg col-span-2 transition-all scale-80 lg:scale-100 lg:hover:scale-95"
           >
-            <Card>
-              <CardContent className="flex flex-col lg:flex-row gap-2 items-center justify-between p-0 ">
+            <Card className="w-full h-full">
+              <CardContent className="w-full h-full flex flex-col lg:flex-row gap-2 items-center justify-between p-0 ">
                 <div className="relative w-full h-full aspect-square rounded-md items-center justify-center overflow-hidden">
                   <Image
                     src={
