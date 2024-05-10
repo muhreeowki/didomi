@@ -22,6 +22,16 @@ export class ProjectsService {
     });
   }
 
+  findProjectDonations(id: number) {
+    return this.databaseService.project
+      .findUnique({
+        where: {
+          id,
+        },
+      })
+      .donations();
+  }
+
   update(id: number, updateProjectDto: Prisma.ProjectUpdateInput) {
     return this.databaseService.project.update({
       where: {

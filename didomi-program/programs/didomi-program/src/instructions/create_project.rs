@@ -1,16 +1,16 @@
 use anchor_lang::prelude::*;
 
-use crate::state::ProjectData;
+use crate::{state::ProjectData, EscrowData};
 
 #[derive(Accounts)]
 pub struct CreateProject<'info> {
     #[account(mut)]
     pub owner: Signer<'info>,
-    #[account(init,  payer = owner, space = 512, seeds = [owner.key().as_ref()], bump)]
+    #[account(init,  payer = owner, space = 512, seeds = [owner.key().as_ref(), "coolproject".as_ref()], bump)]
     pub project: Account<'info, ProjectData>,
     /// CHECK: This is a pda
-    #[account(init,  payer = owner, space = 8, seeds = [owner.key().as_ref(), project.key().as_ref()], bump)]
-    pub escrow: AccountInfo<'info>,
+    #[account(init,  payer = owner, space = 128, seeds = [owner.key().as_ref(), project.key().as_ref()], bump)]
+    pub escrow: Account<'info, EscrowData>,
     pub system_program: Program<'info, System>,
 }
 

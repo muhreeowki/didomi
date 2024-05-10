@@ -17,6 +17,7 @@ import {
   Turtle,
 } from "lucide-react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -122,46 +123,82 @@ const Project = async ({ params }: any) => {
                   <div className="gap-2">
                     <span className="flex items-center justify-start">
                       <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                        {project.currentAmount} {project.acceptedCoins[0]}
+                        {project.currentAmount} {project.acceptedCoins[0]}{" "}
                       </h2>
-                      <p className="leading-7 text-foreground ml-1">
+                      <p className="leading-7 text-muted-foreground ml-2">
                         raised of {project.targetAmount}{" "}
                         {project.acceptedCoins[0]} goal
                       </p>
                     </span>
-                    <span className="flex flex-row md:flex-col gap-1">
+                    <span className="flex flex-col gap-1">
                       <Progress value={33} />
-                      <p className="leading-7 text-foreground md:ml-auto">
+                      <p className="leading-7 text-muted-foreground ml-auto">
                         10K donations
                       </p>
                     </span>
                   </div>
                   <Button>Donate Now</Button>
                 </div>
+                {/* TODO: Display some stats for donations */}
                 <div className="grid gap-6 rounded-lg border p-4">
-                  <legend className="-ml-1 px-1 text-sm font-medium">
-                    Messages
-                  </legend>
-                  <div className="grid gap-3">
-                    <Label htmlFor="role">Role</Label>
-                    <Select defaultValue="system">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="system">System</SelectItem>
-                        <SelectItem value="user">User</SelectItem>
-                        <SelectItem value="assistant">Assistant</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="grid">
+                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                      {project.targetAmount}
+                    </h3>
+                    <p className="leading-7">
+                      People have donated to this project
+                    </p>
                   </div>
                   <div className="grid gap-3">
-                    <Label htmlFor="content">Content</Label>
-                    <Textarea
-                      id="content"
-                      placeholder="You are a..."
-                      className="min-h-[9.5rem]"
-                    />
+                    <div className="flex items-center gap-4 mb-4">
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-between items-start">
+                        <h4 className="scroll-m-20 text-lg font-semibold tracking-wide">
+                          Anonymous
+                        </h4>
+                        <span className="flex justify-center items-center gap-3">
+                          <p className="leading-7 font-semibold">$100</p>
+                          <p className="leading-7 font-bold">•</p>
+                          <p className="leading-7">Top Donation</p>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-between items-start">
+                        <h4 className="scroll-m-20 text-lg font-semibold tracking-wide">
+                          Anonymous
+                        </h4>
+                        <span className="flex justify-center items-center gap-3">
+                          <p className="leading-7 font-semibold">$100</p>
+                          <p className="leading-7 font-bold">•</p>
+                          <p className="leading-7">Top Donation</p>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 mb-4">
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-between items-start">
+                        <h4 className="scroll-m-20 text-lg font-semibold tracking-wide">
+                          Anonymous
+                        </h4>
+                        <span className="flex justify-center items-center gap-3">
+                          <p className="leading-7 font-semibold">$100</p>
+                          <p className="leading-7 font-bold">•</p>
+                          <p className="leading-7">Top Donation</p>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

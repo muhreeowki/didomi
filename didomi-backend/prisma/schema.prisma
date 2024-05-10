@@ -14,47 +14,46 @@ datasource db {
 }
 
 model Project {
-  id             Int            @id @default(autoincrement())
-  accountAddress String         @unique
-  escrowAddress  String         @unique
+  id             Int           @id @default(autoincrement())
+  accountAddress String        @unique
+  escrowAddress  String        @unique
   title          String
   story          String
   category       Category
   targetAmount   Int
-  currentAmount  Int            @default(0)
-  startDate      DateTime       @default(now())
+  currentAmount  Int           @default(0)
+  startDate      DateTime      @default(now())
   endDate        DateTime?
   ownerId        String?
   ownerAddress   String
-  owner          User           @relation(fields: [ownerAddress], references: [walletAddress])
+  owner          User          @relation(fields: [ownerAddress], references: [walletAddress])
   imageURL       String
   websiteURL     String?
-  projectStatus  ProjectStatus  @default(OPEN)
-  contributions  Contribution[]
+  projectStatus  ProjectStatus @default(OPEN)
+  donations      Donation[]
+  totalDonations Int           @default(0)
   acceptedCoins  TokenType[]
-  // socials        Socials?
-  // Socials        Socials?
 }
 
-model Contribution {
-  id                 Int       @id @default(autoincrement())
-  accountAddress     String    @unique
-  transactionHash    String    @unique
-  amount             Int
-  tokenType          TokenType @default(SOL)
-  message            String
-  date               DateTime  @default(now())
-  project            Project   @relation(fields: [projectAddress], references: [accountAddress])
-  projectId          Int
-  projectAddress     String
-  contributor        User      @relation(fields: [contributorAddress], references: [walletAddress])
-  contributorAddress String
+model Donation {
+  id              Int       @id @default(autoincrement())
+  accountAddress  String    @unique
+  transactionHash String    @unique
+  amount          Int
+  tokenType       TokenType @default(SOL)
+  message         String
+  date            DateTime  @default(now())
+  projectId       Int
+  projectAddress  String
+  project         Project   @relation(fields: [projectAddress], references: [accountAddress])
+  donorAddress    String
+  donor           User      @relation(fields: [donorAddress], references: [walletAddress])
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  walletAddress String         @unique
-  contributions Contribution[]
+  id            Int        @id @default(autoincrement())
+  walletAddress String     @unique
+  donations     Donation[]
   projects      Project[]
 }
 
@@ -88,13 +87,3 @@ enum Category {
   CREATIVE
   EVENT
 }
-
-// model Socials {
-//   id             Int     @id @default(autoincrement())
-//   website        String?
-//   twitter        String?
-//   instagram      String?
-//   facebook       String?
-//   projectAddress String  @unique
-//   project        Project @relation(fields: [projectAddress], references: [accountAddress])
-// }

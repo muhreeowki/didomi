@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { RedirectType, notFound, redirect } from "next/navigation";
@@ -11,6 +12,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import * as anchor from "@coral-xyz/anchor";
+import * as walletAdapterReact from "@solana/wallet-adapter-react";
+import * as web3 from "@solana/web3.js";
+import { DidomiProgram } from "../../../../../didomi-program/target/types/didomi_program";
+import idl from "../../../../../didomi-program/target/idl/didomi_program.json";
+import { useSession } from "next-auth/react";
 
 const ProjectDashboardPage = async ({
   params,
@@ -26,9 +33,58 @@ const ProjectDashboardPage = async ({
     })
     .catch(console.error);
 
+  // SOLANA CONFIG
+  const wallet = walletAdapterReact.useWallet();
+  const userWallet = walletAdapterReact.useAnchorWallet();
+  const { connection } = walletAdapterReact.useConnection();
+  const programID = new web3.PublicKey(idl.address);
+  // Session Data
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+
+  const getProvider = () => {
+    if (!userWallet) return null;
+    return new anchor.AnchorProvider(connection, userWallet, {
+      preflightCommitment: "processed",
+    });
+  };
+
   const handleDelete = async (id: string) => {
-    "use server";
-    const { data } = await axios.delete(`http://localhost:8000/projects/${id}`);
+    // 0. Check that wallet is connected
+    if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
+      return;
+    }
+    // 1. Connect to Solana
+    const userPubKey = wallet.publicKey.toString();
+    const provider = getProvider();
+    if (!provider) {
+      console.error("Provider is not available.");
+      return;
+    }
+    const program = new anchor.Program<DidomiProgram>(
+      idl as DidomiProgram,
+      provider
+    );
+    const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer()],
+      program.programId
+    );
+    const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
+      program.programId
+    );
+    // Delete Project on Solana
+    await program.methods
+      .deleteProject()
+      .accountsStrict({
+        owner: wallet.publicKey,
+        escrow: escrowAddress,
+        project: projectAddress,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+    // Delete project on Backend Server
+    await axios.delete(`http://localhost:8000/projects/${id}`);
     redirect("/dashboard", RedirectType.replace);
   };
 

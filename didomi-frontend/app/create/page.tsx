@@ -137,8 +137,9 @@ const CreateProject = () => {
       idl as DidomiProgram,
       provider
     );
+    // TODO: FIX THIS
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
-      [provider.publicKey?.toBuffer()],
+      [provider.publicKey?.toBuffer(), Uint8Array.from("coolproject")],
       program.programId
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -147,14 +148,17 @@ const CreateProject = () => {
     );
     // 2. Connect the user's wallet and sign them in
     const user = await axios
-      .get(`http://localhost:8000/users/${userPubKey}`)
+      .get(`${"http://localhost:8000"}/users/${userPubKey}`)
       .then(async (response) => {
         // 2. Create user if user does not exist
         if (response.data == "") {
           console.log("user not found, creating user...");
-          const { data } = await axios.post(`http://localhost:8000/users`, {
-            walletAddress: userPubKey,
-          });
+          const { data } = await axios.post(
+            `${"http://localhost:8000"}/users`,
+            {
+              walletAddress: userPubKey,
+            }
+          );
           console.log(data);
           return data;
         } else {
@@ -166,7 +170,7 @@ const CreateProject = () => {
       .catch((err) => console.error(err));
     // 3. Create Project On Backend Server
     const project = await axios
-      .post("http://localhost:8000/projects", {
+      .post(`${"http://localhost:8000"}/projects`, {
         ...data,
         accountAddress: projectAddress.toString(),
         escrowAddress: escrowAddress.toString(),
@@ -216,6 +220,9 @@ const CreateProject = () => {
       console.log(tx);
       router.push(`/projects/${project.id}`);
     } catch (error) {
+      if (project) {
+        await axios.delete(`${"http://localhost:8000"}/projects/${project.id}`);
+      }
       console.error(error);
       return;
     }

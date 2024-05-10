@@ -1,15 +1,15 @@
 use anchor_lang::prelude::*;
 use solana_program::system_instruction;
 
-use crate::{state::Contribution, ProjectData};
+use crate::{state::Donation, ProjectData};
 
 #[derive(Accounts)]
-pub struct CreateContribution<'info> {
+pub struct CreateDonation<'info> {
     #[account()]
     #[account(mut)]
-    pub contributor: Signer<'info>,
-    #[account(init_if_needed, payer = contributor, space = 256, seeds = ["contribution".as_ref(), contributor.key().as_ref(), project_account.key().as_ref()], bump)]
-    pub contribution: Account<'info, Contribution>,
+    pub donor: Signer<'info>,
+    #[account(init_if_needed, payer = donor, space = 256, seeds = ["donation".as_ref(), donor.key().as_ref(), project_account.key().as_ref()], bump)]
+    pub donation: Account<'info, Donation>,
     #[account(mut)]
     pub project_account: Account<'info, ProjectData>,
     /// CHECK: Checking that this account is the same as the one in the project provided
@@ -18,31 +18,31 @@ pub struct CreateContribution<'info> {
     system_program: Program<'info, System>,
 }
 
-pub fn create_contribution_handler(
-    ctx: Context<CreateContribution>,
+pub fn create_donation_handler(
+    ctx: Context<CreateDonation>,
     id: u64,
     amount: u64,
     token_type: u8,
 ) -> Result<()> {
-    let contributor = &mut ctx.accounts.contributor;
-    let contribution = &mut ctx.accounts.contribution;
+    let donor = &mut ctx.accounts.donor;
+    let donation = &mut ctx.accounts.donation;
     let project = &mut ctx.accounts.project_account;
     let escrow = &mut ctx.accounts.project_escrow;
-    // Intialize Contribution
-    contribution.id = id;
-    contribution.amount += amount;
-    contribution.token_type = token_type;
-    contribution.contributor = contributor.key();
-    contribution.project = project.key();
+    // Intialize Donation
+    donation.id = id;
+    donation.amount += amount;
+    donation.token_type = token_type;
+    donation.donor = donor.key();
+    donation.project = project.key();
     // Making the Donation
     // Create the transfer instruction
     let transfer_instruction =
-        system_instruction::transfer(&contributor.key(), escrow.key, contribution.amount);
+        system_instruction::transfer(&donor.key(), escrow.key, donation.amount);
     // Invoke the transfer instruction
     anchor_lang::solana_program::program::invoke_signed(
         &transfer_instruction,
         &[
-            contributor.to_account_info(),
+            donor.to_account_info(),
             escrow.clone(),
             ctx.accounts.system_program.to_account_info(),
         ],
@@ -52,6 +52,6 @@ pub fn create_contribution_handler(
     TODO: Record Donations in USD
     Record Donation
     */
-    project.current_amount += contribution.amount / 1000000000; // SOL
+    project.current_amount += donation.amount / 1000000000; // SOL
     Ok(())
 }

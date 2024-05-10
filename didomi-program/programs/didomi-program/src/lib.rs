@@ -36,18 +36,18 @@ pub mod didomi_program {
 
     // Delete project instruction
     pub fn delete_project(ctx: Context<DeleteProject>) -> Result<()> {
-        instructions::delete_project_handler(ctx)?;
+        delete_project_handler(ctx)?;
         Ok(())
     }
 
     // Contribution instruction
-    pub fn create_contribution(
-        ctx: Context<CreateContribution>,
+    pub fn create_donation(
+        ctx: Context<CreateDonation>,
         id: u64,
         amount: u64,
         token_type: u8,
     ) -> Result<()> {
-        create_contribution_handler(ctx, id, amount, token_type)?;
+        create_donation_handler(ctx, id, amount, token_type)?;
         Ok(())
     }
 }

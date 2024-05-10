@@ -29,6 +29,11 @@ export class ProjectsController {
     return this.projectsService.findOne(+id);
   }
 
+  @Get(':id/donations')
+  findProjectDonations(@Param('id') id: string) {
+    return this.projectsService.findProjectDonations(+id);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

@@ -1,11 +1,11 @@
 use anchor_lang::prelude::*;
 // Struct to represent a Donation
 #[account]
-pub struct Contribution {
+pub struct Donation {
     /// Contribution ID
     pub id: u64,
     /// Contributor's public key
-    pub contributor: Pubkey,
+    pub donor: Pubkey,
     /// Project's public key
     pub project: Pubkey,
     /// Contribution amount (in smallest token unit)
