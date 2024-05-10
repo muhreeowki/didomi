@@ -5,7 +5,7 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-didomi_program = "4f8xSv3wUdYUe2z343s4M2WRH7Hy2zr7Mdmpi31Y59bY"
+didomi_program = "SNNuq33tepwjoqeRCj3GcNkW4R4hZF88pNMewZbxWyT"
 
 [registry]
 url = "https://api.apr.dev"

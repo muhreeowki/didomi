@@ -5,7 +5,7 @@ use self::state::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("4f8xSv3wUdYUe2z343s4M2WRH7Hy2zr7Mdmpi31Y59bY");
+declare_id!("SNNuq33tepwjoqeRCj3GcNkW4R4hZF88pNMewZbxWyT");
 
 #[program]
 pub mod didomi_program {
@@ -47,7 +47,7 @@ pub mod didomi_program {
         amount: u64,
         token_type: u8,
     ) -> Result<()> {
-        create_donation_handler(ctx, id, amount, token_type)?;
+        create_donation_handler(ctx, amount, token_type)?;
         Ok(())
     }
 }

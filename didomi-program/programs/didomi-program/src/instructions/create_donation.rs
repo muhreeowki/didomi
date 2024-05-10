@@ -20,7 +20,6 @@ pub struct CreateDonation<'info> {
 
 pub fn create_donation_handler(
     ctx: Context<CreateDonation>,
-    id: u64,
     amount: u64,
     token_type: u8,
 ) -> Result<()> {
@@ -29,7 +28,6 @@ pub fn create_donation_handler(
     let project = &mut ctx.accounts.project_account;
     let escrow = &mut ctx.accounts.project_escrow;
     // Intialize Donation
-    donation.id = id;
     donation.amount += amount;
     donation.token_type = token_type;
     donation.donor = donor.key();
