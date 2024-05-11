@@ -116,28 +116,38 @@ const DonationDialog = ({ project }: { project: any }) => {
         idl as DidomiProgram,
         provider
       );
-      // Create Donation In Solana
-      const tx = await program.methods
-        .createDonation(
-          new anchor.BN(data.amount * web3.LAMPORTS_PER_SOL),
-          new anchor.BN(1)
-        )
-        .accountsStrict({
-          donor: provider.publicKey,
-          projectOwner: new web3.PublicKey(project.ownerAddress),
-          projectAccount: new web3.PublicKey(project.accountAddress),
-          projectEscrow: new web3.PublicKey(project.escrowAddress),
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .rpc();
+      // // Create Donation In Solana
+      // const tx = await program.methods
+      //   .createDonation(
+      //     new anchor.BN(data.amount * web3.LAMPORTS_PER_SOL),
+      //     new anchor.BN(1)
+      //   )
+      //   .accountsStrict({
+      //     donor: provider.publicKey,
+      //     projectOwner: new web3.PublicKey(project.ownerAddress),
+      //     projectAccount: new web3.PublicKey(project.accountAddress),
+      //     projectEscrow: new web3.PublicKey(project.escrowAddress),
+      //     systemProgram: web3.SystemProgram.programId,
+      //   })
+      //   .rpc();
       // Creat Donation in Backend
-      await axios.post("http://loaclhost:8000/donation", {});
+      await axios.post("http://localhost:8000/donation", {
+        amount: data.amount,
+        tokenType: "SOL",
+        donorAddress: provider.publicKey.toString(),
+        projectAddress: project.accountAddress,
+        projectId: project.id,
+        // transactionHash: tx,
+        transactionHash: "fdshjfdshj",
+        message: data.message || "",
+      });
+      // Update the project Data
 
       setCompleted(true);
       console.log("Donated! Veiw Transaction here:");
-      console.log(tx);
+      // console.log(tx);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

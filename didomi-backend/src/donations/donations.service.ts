@@ -10,12 +10,13 @@ export class DonationService {
     // Increment the number of donations in the project.
     await this.databaseService.project.update({
       where: {
-        accountAddress: createDonationDto.accountAddress,
+        id: createDonationDto.projectId,
       },
       data: {
         totalDonations: { increment: 1 },
       },
     });
+    // Get current price from solana
     return this.databaseService.donation.create({
       data: createDonationDto,
     });

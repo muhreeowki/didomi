@@ -39,7 +39,6 @@ model Donation {
   id              Int       @id @default(autoincrement())
   amount          Int
   tokenType       TokenType @default(SOL)
-  accountAddress  String    @unique
   donorAddress    String
   donor           User      @relation(fields: [donorAddress], references: [walletAddress])
   projectAddress  String

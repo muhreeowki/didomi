@@ -26,13 +26,6 @@ const ProjectDashboardPage = async ({
     id: any;
   };
 }) => {
-  const project: any = await axios
-    .get(`http://localhost:8000/projects/${params.id}`)
-    .then((data) => {
-      return data.data;
-    })
-    .catch(console.error);
-
   // SOLANA CONFIG
   const wallet = walletAdapterReact.useWallet();
   const userWallet = walletAdapterReact.useAnchorWallet();
@@ -41,6 +34,13 @@ const ProjectDashboardPage = async ({
   // Session Data
   const { data: session, status } = useSession();
   const loading = status === "loading";
+  //
+  const project: any = await axios
+    .get(`http://localhost:8000/projects/${params.id}`)
+    .then((data) => {
+      return data.data;
+    })
+    .catch(console.error);
 
   const getProvider = () => {
     if (!userWallet) return null;
