@@ -66,7 +66,7 @@ const ProjectDashboardPage = async ({
       provider
     );
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
-      [provider.publicKey?.toBuffer()],
+      [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
       program.programId
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(

@@ -68,6 +68,7 @@ import Image from "next/image";
 
 import React from "react";
 import axios from "axios";
+import DonationDialog from "@/components/DonationDialog";
 
 const Project = async ({ params }: any) => {
   const project: any = await axios
@@ -81,7 +82,7 @@ const Project = async ({ params }: any) => {
     <TooltipProvider>
       <div className="grid h-full w-full">
         <div className="flex flex-col">
-          <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4">
+          <header className="sticky z-10 top-0 flex h-fit items-center gap-1 border-b bg-background px-4 py-2">
             <h1 className="text-4xl font-semibold">{project.title}</h1>
             <AlertDialog>
               <AlertDialogTrigger className="ml-auto ">
@@ -137,7 +138,7 @@ const Project = async ({ params }: any) => {
                       </p>
                     </span>
                   </div>
-                  <Button>Donate Now</Button>
+                  <DonationDialog project={project} />
                 </div>
                 {/* TODO: Display some stats for donations */}
                 <div className="grid gap-6 rounded-lg border p-4">

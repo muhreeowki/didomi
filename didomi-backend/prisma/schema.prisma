@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Project {
-  id             Int           @id @default(autoincrement())
+  id             Int           @id @unique @default(autoincrement())
   accountAddress String        @unique
   escrowAddress  String        @unique
   title          String
@@ -37,17 +37,17 @@ model Project {
 
 model Donation {
   id              Int       @id @default(autoincrement())
-  accountAddress  String    @unique
-  transactionHash String    @unique
   amount          Int
   tokenType       TokenType @default(SOL)
-  message         String
-  date            DateTime  @default(now())
-  projectId       Int
-  projectAddress  String
-  project         Project   @relation(fields: [projectAddress], references: [accountAddress])
+  accountAddress  String    @unique
   donorAddress    String
   donor           User      @relation(fields: [donorAddress], references: [walletAddress])
+  projectAddress  String
+  projectId       Int
+  project         Project   @relation(fields: [projectAddress], references: [accountAddress])
+  transactionHash String    @unique
+  message         String?
+  date            DateTime  @default(now())
 }
 
 model User {

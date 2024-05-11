@@ -39,3 +39,14 @@ export const UpdateProjectFormSchema = z.object({
   acceptedCoins: z.string({ required_error: "Please select a coin." }),
   projectStatus: z.string(),
 });
+
+export const CreateDonationFormSchema = z.object({
+  amount: z.coerce
+    .number({ required_error: "Please enter a donation amount" })
+    .min(0.000001, "Please enter a donation amount"),
+  tokenType: z.string().min(1, "Please select a coin."),
+  message: z
+    .string({ required_error: "Please tell us about your project." })
+    .optional()
+    .or(z.string().min(10, "Please leave a longer meaningfull message.")),
+});

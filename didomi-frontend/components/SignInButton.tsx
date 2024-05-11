@@ -57,7 +57,9 @@ const SignInButton = () => {
   };
 
   const handleSignMessage = async () => {
-    if (!wallet.publicKey || !csrf || !wallet.signMessage) return;
+    if (!wallet.publicKey || !csrf || !wallet.signMessage) {
+      return;
+    }
     try {
       const message = new SigninMessage({
         domain: window.location.host,

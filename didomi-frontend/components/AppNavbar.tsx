@@ -77,7 +77,7 @@ const components: { title: string; href: string; description: string }[] = [
 
 const Navbar = () => {
   return (
-    <header className="flex container h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between">
+    <header className="flex z-50 container h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between">
       <div className="min-w-fit flex justify-between gap-8">
         <Link className="flex items-center" href="/">
           <Image
@@ -89,7 +89,7 @@ const Navbar = () => {
           />
           <h1 className="font-bold tracking-wide text-2xl">DF</h1>
         </Link>
-        <div className=" hidden md:flex w-full">
+        <div className="z-50 hidden md:flex w-full">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>

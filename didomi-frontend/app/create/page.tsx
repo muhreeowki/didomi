@@ -138,8 +138,10 @@ const CreateProject = () => {
       provider
     );
     // TODO: FIX THIS
+    console.log(provider.publicKey.toBuffer());
+    console.log(Buffer.from("coolproject"));
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
-      [provider.publicKey?.toBuffer(), Uint8Array.from("coolproject")],
+      [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
       program.programId
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -179,8 +181,6 @@ const CreateProject = () => {
         ownerId: String(user.id),
       })
       .then((response) => {
-        console.log("project created!");
-        console.log(response.data);
         return response.data;
       })
       .catch((err) => console.error(err));

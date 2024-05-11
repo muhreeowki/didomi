@@ -43,7 +43,6 @@ pub mod didomi_program {
     // Contribution instruction
     pub fn create_donation(
         ctx: Context<CreateDonation>,
-        id: u64,
         amount: u64,
         token_type: u8,
     ) -> Result<()> {
