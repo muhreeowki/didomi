@@ -3,12 +3,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const getUserProjects = async (walletAddress: string) => {
-  const router = useRouter()
+  const router = useRouter();
   const { data } = await axios.get(
-    `http://localhost:8000/users/projects/${walletAddress}`
+    `http://localhost:8000/users/projects/${walletAddress}`,
   );
   if (data) return data;
-  router.push("/create")
 };
 
 export default getUserProjects;

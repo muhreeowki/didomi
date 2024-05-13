@@ -15,11 +15,6 @@ import { useDidomiContext } from "@/context";
 const Home = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  React.useEffect(() => {
-    if (session) {
-      router.push("/dashboard");
-    }
-  }, [session]);
 
   return (
     <>

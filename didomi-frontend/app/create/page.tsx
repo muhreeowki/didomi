@@ -47,13 +47,13 @@ import { DidomiProgram } from "../../../didomi-program/target/types/didomi_progr
 import idl from "../../../didomi-program/target/idl/didomi_program.json";
 
 const CreateProject = () => {
-  // UTILS
+  // Routing Config
   const router = useRouter();
 
-  // UI CONFIG
+  // Ui Config
   const { toast } = useToast();
 
-  // ZOD FORM CONFIG
+  // Form Handling
   type Inputs = z.infer<typeof CreateProjectFormSchema>;
   const [currentStep, setCurrentStep] = React.useState(0);
   const form = useForm<Inputs>({
@@ -67,10 +67,11 @@ const CreateProject = () => {
       targetAmount: 0,
       category: "",
       ownerAddress: "",
-      escrowAddress: "adfgjuyfhgrwtrtopeiruqefdfa",
-      accountAddress: "adfgjuyfhgrwtrtopeiruqefdfa",
+      escrowAddress: "",
+      accountAddress: "",
     },
   });
+
   const formSteps = [
     {
       id: "step1",
@@ -88,7 +89,8 @@ const CreateProject = () => {
       fields: ["imageURL", "websiteURL"],
     },
   ];
-  // Form Functions
+
+  // Form Stepper Functions
   const nextStep = async () => {
     const fields = formSteps[currentStep].fields;
     const result = await form.trigger(fields as FieldName[], {
@@ -105,18 +107,20 @@ const CreateProject = () => {
     }
   };
 
-  // SOLANA CONFIG
+  // Solana connection Setup
   const wallet = walletAdapterReact.useWallet();
   const userWallet = walletAdapterReact.useAnchorWallet();
   const { connection } = walletAdapterReact.useConnection();
   const programID = new web3.PublicKey(idl.address);
 
+  // Solana setup
   const getProvider = () => {
     if (!userWallet) return null;
     return new anchor.AnchorProvider(connection, userWallet, {
       preflightCommitment: "processed",
     });
   };
+
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
@@ -127,45 +131,39 @@ const CreateProject = () => {
       return;
     }
     // 1. Connect to Solana
-    const userPubKey = wallet.publicKey.toString();
     const provider = getProvider();
     if (!provider) {
       console.error("Provider is not available.");
       return;
     }
+    // Collect Needed Addresses
+    const userPubKey = provider.publicKey.toString();
     const program = new anchor.Program<DidomiProgram>(
       idl as DidomiProgram,
-      provider
+      provider,
     );
-    // TODO: FIX THIS
-    console.log(provider.publicKey.toBuffer());
-    console.log(Buffer.from("coolproject"));
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
-      program.programId
+      program.programId,
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
-      program.programId
+      program.programId,
     );
-    // 2. Connect the user's wallet and sign them in
+    // 2. Check if the user exists in backend
     const user = await axios
       .get(`${"http://localhost:8000"}/users/${userPubKey}`)
       .then(async (response) => {
-        // 2. Create user if user does not exist
+        // Create user if user does not exist
         if (response.data == "") {
-          console.log("user not found, creating user...");
           const { data } = await axios.post(
             `${"http://localhost:8000"}/users`,
             {
               walletAddress: userPubKey,
-            }
+            },
           );
-          console.log(data);
           return data;
         } else {
-          console.log("user found, returning user...");
-          console.log(response.data);
           return response.data;
         }
       })
@@ -192,6 +190,7 @@ const CreateProject = () => {
 
     // 4. Create Project on Solana
     try {
+      // Converting String to type [u8: 64] in Rust
       const encoder = new TextEncoder();
       const titleBytes = encoder.encode(project.title as string);
       const projectTitle = new Uint8Array(64);
@@ -204,7 +203,7 @@ const CreateProject = () => {
           new anchor.BN(project.id),
           new anchor.BN(project.ownerId),
           Array.from(projectTitle),
-          new anchor.BN(project.targetAmount)
+          new anchor.BN(project.targetAmount),
         )
         .accountsStrict({
           owner: userWallet?.publicKey,

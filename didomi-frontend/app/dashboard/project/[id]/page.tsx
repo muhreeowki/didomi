@@ -52,11 +52,11 @@ const ProjectDashboardPage = async ({
 
   // Function to delete a project from backend and solana
   const handleDelete = async (id: string) => {
-    // 0. Check that wallet is connected
+    // 1. Check that wallet is connected
     if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
       return;
     }
-    // 1. Connect to Solana Program
+    // 2. Connect to Solana Program
     const userPubKey = wallet.publicKey.toString();
     const provider = getProvider();
     if (!provider) {
@@ -77,15 +77,15 @@ const ProjectDashboardPage = async ({
       program.programId,
     );
     // Call delete instruction on Solana Program
-    // await program.methods
-    //   .deleteProject()
-    //   .accountsStrict({
-    //     owner: wallet.publicKey,
-    //     escrow: escrowAddress,
-    //     project: projectAddress,
-    //     systemProgram: web3.SystemProgram.programId,
-    //   })
-    //   .rpc();
+    await program.methods
+      .deleteProject()
+      .accountsStrict({
+        owner: wallet.publicKey,
+        escrow: escrowAddress,
+        project: projectAddress,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
     // Delete project on Backend Server
     await axios.delete(`http://localhost:8000/projects/${id}`);
     console.log("archived");
