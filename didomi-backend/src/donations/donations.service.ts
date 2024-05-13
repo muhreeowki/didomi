@@ -14,6 +14,7 @@ export class DonationService {
       },
       data: {
         totalDonations: { increment: 1 },
+        currentAmount: { increment: createDonationDto.amount },
       },
     });
     // Get current price from solana

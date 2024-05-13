@@ -42,9 +42,12 @@ export class ProjectsService {
   }
 
   remove(id: number) {
-    return this.databaseService.project.delete({
+    return this.databaseService.project.update({
       where: {
         id,
+      },
+      data: {
+        projectStatus: 'CLOSED',
       },
     });
   }
