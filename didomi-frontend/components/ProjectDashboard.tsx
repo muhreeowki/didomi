@@ -6,6 +6,7 @@ import { Page } from "@/lib/enums";
 
 const ProjectDashboard = (props: {
   project: any;
+  donations: any;
   deleteFunc: Function;
 }): React.JSX.Element => {
   const [page, setPage] = React.useState<Page>(Page.ProjectAnalytics);
@@ -19,6 +20,7 @@ const ProjectDashboard = (props: {
   ) : (
     <ProjectAnalytics
       project={props.project}
+      donations={props.donations}
       deleteFunc={props.deleteFunc}
       setPage={setPage}
     />

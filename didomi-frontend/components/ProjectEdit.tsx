@@ -345,7 +345,7 @@ const ProjectEditPage = (props: {
                                   <SelectItem key={i} value={status}>
                                     {status}
                                   </SelectItem>
-                                )
+                                ),
                               )}
                             </SelectContent>
                           </Select>
@@ -398,10 +398,11 @@ const ProjectEditPage = (props: {
               </Card>
               <Card x-chunk="dashboard-07-chunk-5">
                 <CardHeader>
-                  <CardTitle>Delete Project</CardTitle>
+                  <CardTitle>Archive Project</CardTitle>
                   <CardDescription>
-                    Permanently delete the project. The link for this project
-                    will no longer work, and will be reused.
+                    The project will be archived and donors will not be able to
+                    access it. The link for this project will no longer work,
+                    and you will not be able to access this project.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="text-right">
@@ -416,7 +417,7 @@ const ProjectEditPage = (props: {
                       router.replace("/dashboard");
                     }}
                   >
-                    Delete Project
+                    Archive Project
                   </Button>
                 </CardContent>
               </Card>

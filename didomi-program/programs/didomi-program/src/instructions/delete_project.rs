@@ -7,7 +7,7 @@ pub struct DeleteProject<'info> {
     pub owner: Signer<'info>,
     #[account(mut, seeds = [owner.key().as_ref(), "coolproject".as_ref()], bump, close = owner)]
     pub project: Account<'info, ProjectData>,
-    #[account(mut, seeds = [owner.key().as_ref(), project.key().as_ref()], bump,close = owner)]
+    #[account(mut, seeds = [owner.key().as_ref(), project.key().as_ref()], bump, close = owner)]
     pub escrow: Account<'info, EscrowData>,
     pub system_program: Program<'info, System>,
 }

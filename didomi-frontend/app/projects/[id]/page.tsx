@@ -132,7 +132,13 @@ const Project = async ({ params }: any) => {
                       </p>
                     </span>
                     <span className="flex flex-col gap-1">
-                      <Progress value={33} />
+                      <Progress
+                        value={
+                          (Number(project.currentAmount) /
+                            Number(project.targetAmount)) *
+                          100
+                        }
+                      />
                       <p className="leading-7 text-muted-foreground ml-auto">
                         10K donations
                       </p>
@@ -144,7 +150,7 @@ const Project = async ({ params }: any) => {
                 <div className="grid gap-6 rounded-lg border p-4">
                   <div className="grid">
                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                      {project.targetAmount}
+                      {project.totalDonations}
                     </h3>
                     <p className="leading-7">
                       People have donated to this project

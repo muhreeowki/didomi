@@ -1,3 +1,4 @@
+/* PROJECT DETAILS PAGE. VEIWED BY PROJECT CREATOR ONLY */
 "use client";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,9 @@ import * as web3 from "@solana/web3.js";
 import { DidomiProgram } from "../../../../../didomi-program/target/types/didomi_program";
 import idl from "../../../../../didomi-program/target/idl/didomi_program.json";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import getProject from "@/hooks/getProject";
+import getDonations from "@/hooks/getDonations";
 
 const ProjectDashboardPage = async ({
   params,
@@ -26,7 +30,7 @@ const ProjectDashboardPage = async ({
     id: any;
   };
 }) => {
-  // SOLANA CONFIG
+  // Solana State Config
   const wallet = walletAdapterReact.useWallet();
   const userWallet = walletAdapterReact.useAnchorWallet();
   const { connection } = walletAdapterReact.useConnection();
@@ -34,14 +38,11 @@ const ProjectDashboardPage = async ({
   // Session Data
   const { data: session, status } = useSession();
   const loading = status === "loading";
-  //
-  const project: any = await axios
-    .get(`http://localhost:8000/projects/${params.id}`)
-    .then((data) => {
-      return data.data;
-    })
-    .catch(console.error);
-
+  const router = useRouter();
+  // Get Project and Donations from Backend
+  const project: any = await getProject(params.id);
+  const donations: any = await getDonations(params.id);
+  // Helper to get a provider to connect to the solana program
   const getProvider = () => {
     if (!userWallet) return null;
     return new anchor.AnchorProvider(connection, userWallet, {
@@ -49,12 +50,13 @@ const ProjectDashboardPage = async ({
     });
   };
 
+  // Function to delete a project from backend and solana
   const handleDelete = async (id: string) => {
     // 0. Check that wallet is connected
     if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
       return;
     }
-    // 1. Connect to Solana
+    // 1. Connect to Solana Program
     const userPubKey = wallet.publicKey.toString();
     const provider = getProvider();
     if (!provider) {
@@ -63,29 +65,31 @@ const ProjectDashboardPage = async ({
     }
     const program = new anchor.Program<DidomiProgram>(
       idl as DidomiProgram,
-      provider
+      provider,
     );
+    // Solana Addresses
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
-      program.programId
+      program.programId,
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
-      program.programId
+      program.programId,
     );
-    // Delete Project on Solana
-    await program.methods
-      .deleteProject()
-      .accountsStrict({
-        owner: wallet.publicKey,
-        escrow: escrowAddress,
-        project: projectAddress,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
+    // Call delete instruction on Solana Program
+    // await program.methods
+    //   .deleteProject()
+    //   .accountsStrict({
+    //     owner: wallet.publicKey,
+    //     escrow: escrowAddress,
+    //     project: projectAddress,
+    //     systemProgram: web3.SystemProgram.programId,
+    //   })
+    //   .rpc();
     // Delete project on Backend Server
     await axios.delete(`http://localhost:8000/projects/${id}`);
-    redirect("/dashboard", RedirectType.replace);
+    console.log("archived");
+    router.replace("/dashboard");
   };
 
   return project ? (
@@ -106,7 +110,11 @@ const ProjectDashboardPage = async ({
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <ProjectDashboard project={project} deleteFunc={handleDelete} />
+        <ProjectDashboard
+          project={project}
+          donations={donations}
+          deleteFunc={handleDelete}
+        />
       </div>
     </div>
   ) : (

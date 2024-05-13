@@ -114,22 +114,22 @@ const DonationDialog = ({ project }: { project: any }) => {
       }
       const program = new anchor.Program<DidomiProgram>(
         idl as DidomiProgram,
-        provider
+        provider,
       );
-      // // Create Donation In Solana
-      // const tx = await program.methods
-      //   .createDonation(
-      //     new anchor.BN(data.amount * web3.LAMPORTS_PER_SOL),
-      //     new anchor.BN(1)
-      //   )
-      //   .accountsStrict({
-      //     donor: provider.publicKey,
-      //     projectOwner: new web3.PublicKey(project.ownerAddress),
-      //     projectAccount: new web3.PublicKey(project.accountAddress),
-      //     projectEscrow: new web3.PublicKey(project.escrowAddress),
-      //     systemProgram: web3.SystemProgram.programId,
-      //   })
-      //   .rpc();
+      // Create Donation In Solana
+      const tx = await program.methods
+        .createDonation(
+          new anchor.BN(data.amount * web3.LAMPORTS_PER_SOL),
+          new anchor.BN(1),
+        )
+        .accountsStrict({
+          donor: provider.publicKey,
+          projectOwner: new web3.PublicKey(project.ownerAddress),
+          projectAccount: new web3.PublicKey(project.accountAddress),
+          projectEscrow: new web3.PublicKey(project.escrowAddress),
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc();
       // Creat Donation in Backend
       await axios.post("http://localhost:8000/donation", {
         amount: data.amount,
@@ -137,22 +137,19 @@ const DonationDialog = ({ project }: { project: any }) => {
         donorAddress: provider.publicKey.toString(),
         projectAddress: project.accountAddress,
         projectId: project.id,
-        // transactionHash: tx,
-        transactionHash: "fdshjfdshj",
+        transactionHash: tx,
         message: data.message || "",
       });
       // Update the project Data
-
       setCompleted(true);
       console.log("Donated! Veiw Transaction here:");
-      // console.log(tx);
+      console.log(tx);
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(false);
     }
   };
-  const checkForm = () => {};
 
   return (
     <section>

@@ -23,10 +23,9 @@ const UserDashboard = () => {
   React.useEffect(() => {
     if (!wallet.connected && status != "loading") {
       handleSignOut().catch(console.error);
-      router.replace("/")
+      router.replace("/");
     }
   }, [wallet.connected]);
-
 
   return (
     <main className="grid grid-cols-12 justify-center">
