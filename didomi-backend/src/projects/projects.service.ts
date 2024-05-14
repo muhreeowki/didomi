@@ -41,13 +41,15 @@ export class ProjectsService {
     });
   }
 
-  remove(id: number) {
-    return this.databaseService.project.update({
+  async remove(id: number) {
+    await this.databaseService.donation.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
+    return this.databaseService.project.delete({
       where: {
         id,
-      },
-      data: {
-        projectStatus: 'CLOSED',
       },
     });
   }
