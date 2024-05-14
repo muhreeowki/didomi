@@ -74,21 +74,25 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
+import { ContainerIcon } from "lucide-react";
 
-import { Page, categories, tokens, projectStatus } from "@/lib/enums";
 import { z } from "zod";
+import { Page, categories, tokens, projectStatus } from "@/lib/enums";
 import { UpdateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import * as React from "react";
 import axios from "axios";
-import * as anchor from "@coral-xyz/anchor";
-import * as walletAdapterReact from "@solana/wallet-adapter-react";
-import { useToast } from "@/components/ui/use-toast";
-import { ContainerIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import { DidomiProgram } from "../../didomi-program/target/types/didomi_program";
+import idl from "../../didomi-program/target/idl/didomi_program.json";
+import * as web3 from "@solana/web3.js";
+import * as anchor from "@coral-xyz/anchor";
+import * as walletAdapterReact from "@solana/wallet-adapter-react";
 
 const ProjectEditPage = (props: {
   project: any;
@@ -113,41 +117,108 @@ const ProjectEditPage = (props: {
     },
   });
 
-  // SOLANA CONFIG
+  // Solana connection Setup
   const wallet = walletAdapterReact.useWallet();
+  const userWallet = walletAdapterReact.useAnchorWallet();
+  const { connection } = walletAdapterReact.useConnection();
+  const programID = new web3.PublicKey(idl.address);
+
+  // Solana setup
+  const getProvider = () => {
+    if (!userWallet) return null;
+    return new anchor.AnchorProvider(connection, userWallet, {
+      preflightCommitment: "processed",
+    });
+  };
+
+  // Session State
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
+  // Main Update Function
   const update = async (data: Inputs) => {
     // 0. Check that wallet is connected
     if (!wallet.connected || status !== "authenticated" || !wallet.publicKey) {
       return;
     }
-    const userPubKey = wallet.publicKey.toString();
-    // 3. Create Project On Backend
+    // 1. Connect to Solana
+    const provider = getProvider();
+    if (!provider) {
+      console.error("Provider is not available.");
+      return;
+    }
+    // Collect Needed Addresses
+    const userPubKey = provider.publicKey.toString();
+    const program = new anchor.Program<DidomiProgram>(
+      idl as DidomiProgram,
+      provider
+    );
+    const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
+      program.programId
+    );
+    const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
+      [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
+      program.programId
+    );
+    // 3. Update Project On Backend Server
     const project = await axios
-      .patch(`http://localhost:8000/projects/${props.project.id}`, {
+      .patch(`${"http://localhost:8000"}/projects/${props.project.id}`, {
         ...data,
         acceptedCoins: [data.acceptedCoins],
       })
       .then((response) => {
-        console.log("project updated!");
-        console.log(response.data);
         return response.data;
       })
       .catch((err) => console.error(err));
-    // 4. Connect to Solana
-    // const program = new anchor.Program(idl, provider);
-    // const [address] = anchor.web3.PublicKey.findProgramAddressSync(
-    //   [provider.publicKey?.toBuffer()],
-    //   program.programId
-    // );
-    // 5. Create Project on Solana
-    // TODO: Call createproject instruction onchain
-    // 6. Completed
-    console.log("Created Project:");
-    console.log(project);
-    router.back();
+
+    if (!project) {
+      console.error("Unable to Update Project.");
+      return;
+    }
+
+    // 4. Update Project on Solana
+    try {
+      // Converting String to type [u8: 64] in Rust
+      const encoder = new TextEncoder();
+      const titleBytes = encoder.encode(data.title as string);
+      const projectTitle = new Uint8Array(64);
+      projectTitle.set(titleBytes, 0);
+      for (let i: number = titleBytes.length; i < 64; i++) {
+        projectTitle[i] = 0;
+      }
+      const tx = await program.methods
+        .updateProject(
+          Array.from(projectTitle),
+          new anchor.BN(data.targetAmount)
+        )
+        .accountsStrict({
+          owner: userWallet?.publicKey,
+          project: projectAddress,
+          escrow: escrowAddress,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc();
+      // 6. Completed
+      console.log("Updated Project:");
+      console.log(project);
+      console.log("Transaction Hash");
+      console.log(tx);
+      router.push(`/projects/${project.id}`);
+    } catch (error) {
+      if (project) {
+        await axios
+          .patch(`${"http://localhost:8000"}/projects/${props.project.id}`, {
+            ...project,
+          })
+          .then((response) => {
+            return response.data;
+          })
+          .catch((err) => console.error(err));
+      }
+      console.error(error);
+      return;
+    }
   };
 
   return (
@@ -345,7 +416,7 @@ const ProjectEditPage = (props: {
                                   <SelectItem key={i} value={status}>
                                     {status}
                                   </SelectItem>
-                                ),
+                                )
                               )}
                             </SelectContent>
                           </Select>
