@@ -18,6 +18,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 import { CircleUser, LogIn } from "lucide-react";
 import { Button } from "./ui/button";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
@@ -101,15 +102,20 @@ const SignInButton = () => {
       {session?.user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="mr-4">
+            <Button variant="outline" className="gap-1">
               <CircleUser className="h-6 w-6" />
+              <span>{wallet.publicKey?.toString().substring(0, 6)}...</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={"/dashboard"}>Dashboard</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={"mailto:muriuki@muchiri.com"}>Support</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
