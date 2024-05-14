@@ -22,7 +22,7 @@ pub fn create_project_handler(
     target_amount: u64,
 ) -> Result<()> {
     let project = &mut ctx.accounts.project;
-    // Initialize Project
+    // Initialize New Project
     project.id = id;
     project.title = title;
     project.target_amount = target_amount;

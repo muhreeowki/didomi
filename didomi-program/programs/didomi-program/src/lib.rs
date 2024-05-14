@@ -25,12 +25,10 @@ pub mod didomi_program {
     // Update project instruction
     pub fn update_project(
         ctx: Context<UpdateProject>,
-        id: u64,
-        owner_id: u64,
         title: [u8; 64],
         target_amount: u64,
     ) -> Result<()> {
-        update_project_handler(ctx, id, owner_id, title, target_amount)?;
+        update_project_handler(ctx, title, target_amount)?;
         Ok(())
     }
 
