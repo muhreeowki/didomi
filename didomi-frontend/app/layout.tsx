@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import { DidomiProvider } from "@/context";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -26,17 +27,23 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          font.className +
-          "min-h-screen font-sans antialiased bg-muted/15 relative"
+          "h-screen font-sans antialiased bg-muted/15" + font.className
         }
       >
         <SolanaProviders>
           <NextAuthProvider>
             <DidomiProvider>
-              <Navbar />
-              <main className="w-full h-full container mt-4 px-4 md:px-6">
-                {children}
-              </main>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="dark"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Navbar />
+                <main className="w-full h-full mt-10 px-4 md:px-6">
+                  {children}
+                </main>
+              </ThemeProvider>
             </DidomiProvider>
           </NextAuthProvider>
         </SolanaProviders>

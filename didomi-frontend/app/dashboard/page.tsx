@@ -96,16 +96,16 @@ const ProjectDashboardPage = async ({}) => {
     }
     const program = new anchor.Program<DidomiProgram>(
       idl as DidomiProgram,
-      provider
+      provider,
     );
     // Solana Addresses
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
-      program.programId
+      program.programId,
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
-      program.programId
+      program.programId,
     );
     // Call delete instruction on Solana Program
     await program.methods
