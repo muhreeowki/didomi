@@ -27,7 +27,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          "h-screen font-sans antialiased bg-muted/15" + font.className
+          "min-h-screen -z-10 font-sans antialiased bg-background" +
+          font.className
         }
       >
         <SolanaProviders>
@@ -35,14 +36,11 @@ export default function RootLayout({
             <DidomiProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="dark"
+                defaultTheme="light"
                 enableSystem
                 disableTransitionOnChange
               >
-                <Navbar />
-                <main className="w-full h-full mt-10 px-4 md:px-6">
-                  {children}
-                </main>
+                {children}
               </ThemeProvider>
             </DidomiProvider>
           </NextAuthProvider>
