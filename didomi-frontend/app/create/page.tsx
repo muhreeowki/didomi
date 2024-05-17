@@ -38,13 +38,20 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { CreateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldName, FieldValue, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldArray,
+  FieldName,
+  FieldValue,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
 import * as web3 from "@solana/web3.js";
 import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
 import idl from "../../../didomi-program/target/idl/didomi_program.json";
+import DashboardNavbar from "@/components/DashboardNavbar";
 
 const CreateProject = () => {
   // Routing Config
@@ -93,7 +100,7 @@ const CreateProject = () => {
   // Form Stepper Functions
   const nextStep = async () => {
     const fields = formSteps[currentStep].fields;
-    const result = await form.trigger(fields as FieldName[], {
+    const result = await form.trigger(fields as FieldName<Inputs>[], {
       shouldFocus: true,
     });
     if (!result) return;
@@ -230,13 +237,21 @@ const CreateProject = () => {
   // PAGE TSX
   return (
     <>
-      <main>
+      <main className="h-screen overflow-scroll bg-muted">
+        <DashboardNavbar />
         <Form {...form}>
           <form
-            className="flex flex-col justify-center items-center gap-4"
+            className="flex container px-4 flex-col justify-center items-center gap-4"
             onSubmit={form.handleSubmit(create)}
           >
-            <h1 className="text-4xl font-semibold mb-6">Create Your Project</h1>
+            <div className="text-left border-b">
+              <h3 className="font-semibold tracking-tight text-3xl leading-5 mt-10">
+                Create Project
+              </h3>
+              <p className="text-base text-muted-foreground my-5">
+                Get started with Didomi by creating your first Project.
+              </p>
+            </div>
             <Tabs
               defaultValue="step1"
               className="max-w-screen-md"
