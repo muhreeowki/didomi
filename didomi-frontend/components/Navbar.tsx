@@ -1,48 +1,23 @@
 "use client";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import logo from "../public/logoWhite.svg";
+import logo from "../public/logoBlack.svg";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  CollapsibleTrigger,
-  CollapsibleContent,
-  Collapsible,
-} from "@/components/ui/collapsible";
-import { Icons } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
 import SignInButton from "./SignInButton";
 import { useSession } from "next-auth/react";
-
-const ReactUIWalletMultiButtonDynamic = dynamic(
-  async () =>
-    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
-  { ssr: false },
-);
 
 const Navbar = () => {
   const { data: session } = useSession();
   return (
-    <header className="sticky top-2 flex z-50 h-20 w-full p-6 shrink-0 items-center md:px-6 justify-between backdrop-blur-sm">
-      <div className="w-full z-50 mt-6 py-4 px-8 drop-shadow-2xl bg-gradient-to-b from-background/60 to-background/40  flex container justify-between gap-8 rounded-full backdrop-blur-sm">
+    <header className="sticky top-0 flex z-50 h-24 w-full p-6 shrink-0 items-center md:px-6 justify-between">
+      <div className="w-full z-50 py-4 px-4 md:px-8 drop-shadow-2xl bg-gradient-to-b from-background/60 to-background/40  flex container justify-between gap-8 rounded-full backdrop-blur-sm">
         <Link className="flex items-center" href="/">
           <Image
             src={logo}
@@ -62,7 +37,7 @@ const Navbar = () => {
                   <NavigationMenuLink>
                     <Button
                       variant={"secondary"}
-                      className="bg-transparent hover:bg-muted"
+                      className="bg-transparent hover:bg-muted hidden md:block"
                     >
                       Dashboard
                     </Button>
