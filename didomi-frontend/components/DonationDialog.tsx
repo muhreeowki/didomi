@@ -54,6 +54,7 @@ import idl from "../../didomi-program/target/idl/didomi_program.json";
 import { useToast } from "./ui/use-toast";
 import SignInButton from "./SignInButton";
 import axios from "axios";
+import { HandCoins } from "lucide-react";
 
 const DonationDialog = ({ project }: { project: any }) => {
   // ZOD FORM CONFIG
@@ -155,7 +156,10 @@ const DonationDialog = ({ project }: { project: any }) => {
     <section>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger className="w-full">
-          <Button className="w-full">Donate Now</Button>
+          <Button className="w-full gap-1">
+            Donate Now
+            <HandCoins />
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="h-fit">
           <AlertDialogHeader>
