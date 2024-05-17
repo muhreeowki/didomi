@@ -151,15 +151,15 @@ const ProjectEditPage = (props: {
     const userPubKey = provider.publicKey.toString();
     const program = new anchor.Program<DidomiProgram>(
       idl as DidomiProgram,
-      provider
+      provider,
     );
     const [projectAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), Buffer.from("coolproject")],
-      program.programId
+      program.programId,
     );
     const [escrowAddress] = anchor.web3.PublicKey.findProgramAddressSync(
       [provider.publicKey?.toBuffer(), projectAddress.toBuffer()],
-      program.programId
+      program.programId,
     );
     // 3. Update Project On Backend Server
     const project = await axios
@@ -177,7 +177,7 @@ const ProjectEditPage = (props: {
       return;
     }
 
-    // 4. Update Project on Solana
+    // 4. Update Project on Solana if user changed any core data.
     try {
       // Converting String to type [u8: 64] in Rust
       const encoder = new TextEncoder();
@@ -190,7 +190,7 @@ const ProjectEditPage = (props: {
       const tx = await program.methods
         .updateProject(
           Array.from(projectTitle),
-          new anchor.BN(data.targetAmount)
+          new anchor.BN(data.targetAmount),
         )
         .accountsStrict({
           owner: userWallet?.publicKey,
@@ -416,7 +416,7 @@ const ProjectEditPage = (props: {
                                   <SelectItem key={i} value={status}>
                                     {status}
                                   </SelectItem>
-                                )
+                                ),
                               )}
                             </SelectContent>
                           </Select>

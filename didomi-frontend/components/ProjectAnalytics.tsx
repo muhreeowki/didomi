@@ -77,15 +77,15 @@ const ProjectAnalytics = (props: {
 }) => {
   return (
     // p-4 sm:px-6 sm:py-0
-    <main className="grid flex-1 items-start gap-4 xl:grid-cols-3">
+    <div className="flex-1 grid items-start gap-4 xl:grid-cols-3">
       <div>
-        <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-          <div className="relative aspect-square w-full object-cover max-h-64 overflow-hidden">
+        <Card className="overflow-hidden flex-1" x-chunk="dashboard-05-chunk-4">
+          <div className="z-10 flex-1 relative aspect-square w-full max-h-64 overflow-hidden">
             <Image
               src={props.project.imageURL || "https://placehold.co/600x400"}
               alt="Project image"
               fill
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", objectPosition: "center" }}
             />
           </div>
           <CardHeader className="flex flex-row items-center justify-center bg-muted/50">
@@ -285,7 +285,7 @@ const ProjectAnalytics = (props: {
           </TabsContent>
         </Tabs>
       </div>
-    </main>
+    </div>
   );
 };
 
