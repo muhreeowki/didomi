@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Home, LineChart, Package, ShoppingCart, Users } from "lucide-react";
+import { Home, LineChart, Box, HandCoins } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const DashboardSidebar = () => {
@@ -26,22 +26,15 @@ const DashboardSidebar = () => {
               href="#"
               className="flex flex-col md:flex-row items-center gap-1 md:gap-3 rounded-lg py-2 text-muted-foreground transition-all hover:text-primary"
             >
-              <ShoppingCart className="h-4 w-4" />
-              Orders
+              <HandCoins className="h-4 w-4" />
+              Contributions
             </Link>
             <Link
               href="#"
-              className="flex flex-col md:flex-row items-center gap-1 md:gap-3 rounded-lg bg-muted py-2 text-primary transition-all hover:text-primary"
+              className="flex flex-col md:flex-row items-center gap-1 md:gap-3 rounded-lg bg-muted py-2 text-muted-foreground transition-all hover:text-primary"
             >
-              <Package className="h-4 w-4" />
-              Products
-            </Link>
-            <Link
-              href="#"
-              className="flex flex-col md:flex-row items-center gap-1 md:gap-3 rounded-lg py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Customers
+              <Box className="h-4 w-4" />
+              Project Info
             </Link>
             <Link
               href="#"

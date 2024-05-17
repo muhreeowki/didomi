@@ -7,8 +7,8 @@ export default function Loading() {
         visible={true}
         height="80"
         width="80"
-        color="hsla(198,100%,68%,1) "
-        secondaryColor="hsla(189,100%,80%,1)"
+        color="hsla(0,0%,30%,1) "
+        secondaryColor="hsla(0,0%,70%,1)"
         strokeWidth={5}
         ariaLabel="oval-loading"
         wrapperStyle={{}}

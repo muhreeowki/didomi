@@ -1,35 +1,9 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
-} from "lucide-react";
+import { MoreVertical, SquareArrowUpRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -41,22 +15,13 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -67,7 +32,6 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Page } from "@/lib/enums";
-import { AspectRatio } from "./ui/aspect-ratio";
 
 const ProjectAnalytics = (props: {
   project: any;
@@ -89,18 +53,23 @@ const ProjectAnalytics = (props: {
             />
           </div>
           <CardHeader className="flex flex-row items-center justify-center bg-muted/50">
-            <div className="flex md:flex-col justify-between md:grid gap-0.5">
+            <div className="flex md:flex-col justify-between md:grid gap-0.5 px-5">
               <div className="grid gap-2 ml-4 md:ml-0 md:mt-4">
-                <CardTitle className="h-fit capitalize text-center md:text-left place-self-end md:place-self-center lg:place-self-start">
+                <CardTitle className="h-fit capitalize text-center xl:text-left place-self-end md:place-self-center lg:place-self-start">
                   {props.project ? props.project.title : "An Error Occured"}
                 </CardTitle>
-                <CardDescription className="flex flex-col md:flex-row h-fit justify-center md:justify-between items-center gap-2">
+                <CardDescription className="flex flex-col h-fit justify-center md:justify-between items-center gap-2">
                   <span>Date: {props.project.startDate.split("T")[0]}</span>
-                  <div className="md:ml-auto flex items-center gap-1">
+                  <div className="xl:ml-auto flex items-center gap-1">
                     <Link href={`/projects/${props.project.id}`}>
-                      <Button size="sm" variant="outline" className="h-8 gap-1">
-                        <Truck className="h-3.5 w-3.5" />
-                        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 gap-1"
+                        title="Veiw"
+                      >
+                        <SquareArrowUpRight className="h-3.5 w-3.5" />
+                        <span className="sr-only md:not-sr-only xl:whitespace-nowrap">
                           Veiw
                         </span>
                       </Button>
