@@ -10,6 +10,8 @@ import Navbar from "@/components/Navbar";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import { DidomiProvider } from "@/context";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const font = Montserrat({ subsets: ["latin"] });
 
@@ -40,7 +42,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                {children}
+                <Suspense fallback={<Loading />}>{children}</Suspense>
               </ThemeProvider>
             </DidomiProvider>
           </NextAuthProvider>
