@@ -12,6 +12,7 @@ import { DidomiProvider } from "@/context";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Suspense } from "react";
 import Loading from "./loading";
+import Error from "./error";
 
 const font = Montserrat({ subsets: ["latin"] });
 

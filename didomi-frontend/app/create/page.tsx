@@ -28,7 +28,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { categories, tokens } from "@/lib/enums";
 import { useToast } from "@/components/ui/use-toast";
-import { ContainerIcon } from "lucide-react";
 import * as React from "react";
 
 import axios from "axios";
@@ -38,13 +37,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { CreateProjectFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FieldArray,
-  FieldName,
-  FieldValue,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { FieldName, useForm } from "react-hook-form";
 
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
@@ -52,6 +45,7 @@ import * as web3 from "@solana/web3.js";
 import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
 import idl from "../../../didomi-program/target/idl/didomi_program.json";
 import DashboardNavbar from "@/components/DashboardNavbar";
+import { BackendError, SolanaError } from "@/lib/exceptions";
 
 const CreateProject = () => {
   // Routing Config
@@ -188,11 +182,12 @@ const CreateProject = () => {
       .then((response) => {
         return response.data;
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        throw new BackendError();
+      });
 
     if (!project) {
-      console.error("Unable to Create Project.");
-      return;
+      throw new BackendError();
     }
 
     // 4. Create Project on Solana
@@ -229,8 +224,7 @@ const CreateProject = () => {
       if (project) {
         await axios.delete(`${"http://localhost:8000"}/projects/${project.id}`);
       }
-      console.error(error);
-      return;
+      throw new SolanaError();
     }
   };
 
