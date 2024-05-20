@@ -30,7 +30,13 @@ const ProjectDashboardPage = async ({}) => {
   const loading = status === "loading";
   const router = useRouter();
   // Get Project and Donations from Backend
-  const project: any = (await getUserProjects(wallet.publicKey?.toString()))[0];
+  const project: undefined | any = await getUserProjects(
+    wallet.publicKey?.toString(),
+  );
+  if (!project) {
+    router.push("/create");
+    return;
+  }
   const donations: any = await getDonations(project.id);
   // Helper to get a provider to connect to the solana program
   const getProvider = () => {

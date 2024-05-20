@@ -2,7 +2,7 @@
 import { BackendError } from "@/lib/exceptions";
 import axios from "axios";
 
-const getProject = async (id: any) => {
+const getProject = async (id: string) => {
   const { data } = await axios
     .get(`http://localhost:8000/projects/${id}`)
     .catch((_) => {
