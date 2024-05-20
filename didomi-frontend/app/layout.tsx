@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { Button } from "@/components/ui/button";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Toaster } from "@/components/ui/toaster";
 import SolanaProviders from "../providers/SolanaProviders";
-import { SessionProvider } from "next-auth/react";
-import Navbar from "@/components/Navbar";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import { DidomiProvider } from "@/context";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Suspense } from "react";
 import Loading from "./loading";
-import Error from "./error";
 
 const font = Montserrat({ subsets: ["latin"] });
 
