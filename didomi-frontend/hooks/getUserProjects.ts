@@ -2,6 +2,7 @@ import { BackendError } from "@/lib/exceptions";
 import axios from "axios";
 
 const getUserProjects = async (walletAddress: string) => {
+  console.log("fetching user project");
   const data = await axios
     .get(`http://localhost:8000/users/projects/${walletAddress}`)
     .catch((_) => {
