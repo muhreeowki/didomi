@@ -1,4 +1,3 @@
-"use client";
 import { BackendError } from "@/lib/exceptions";
 import axios from "axios";
 

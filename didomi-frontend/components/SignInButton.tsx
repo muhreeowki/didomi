@@ -109,6 +109,9 @@ const SignInButton = () => {
     ) {
       setSignInWindowOpen(true);
     }
+    if (!wallet.connected && session) {
+      handleSignOut(true);
+    }
   }, [wallet.connected, session]);
 
   return (
