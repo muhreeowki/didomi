@@ -83,7 +83,7 @@ const ProjectDashboardPage = async ({}) => {
       })
       .rpc();
     // Delete project on Backend Server
-    await axios.delete(`http://localhost:8000/projects/${id}`);
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`);
     console.log("archived");
     router.replace("/dashboard");
   };

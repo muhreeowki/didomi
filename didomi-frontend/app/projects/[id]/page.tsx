@@ -32,7 +32,7 @@ import DonationDialog from "@/components/DonationDialog";
 
 const Project = async ({ params }: any) => {
   const project: any = await axios
-    .get(`http://localhost:8000/projects/${params.id}`)
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/projects/${params.id}`)
     .then((data) => {
       return data.data;
     })

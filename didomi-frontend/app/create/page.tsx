@@ -153,12 +153,12 @@ const CreateProject = () => {
     );
     // 2. Check if the user exists in backend
     const user = await axios
-      .get(`${"http://localhost:8000"}/users/${userPubKey}`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/users/${userPubKey}`)
       .then(async (response) => {
         // Create user if user does not exist
         if (response.data == "") {
           const { data } = await axios.post(
-            `${"http://localhost:8000"}/users`,
+            `${process.env.NEXT_PUBLIC_API_URL}/users`,
             {
               walletAddress: userPubKey,
             },
@@ -171,7 +171,7 @@ const CreateProject = () => {
       .catch((err) => console.error(err));
     // 3. Create Project On Backend Server
     const project = await axios
-      .post(`${"http://localhost:8000"}/projects`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
         ...data,
         accountAddress: projectAddress.toString(),
         escrowAddress: escrowAddress.toString(),
@@ -222,7 +222,9 @@ const CreateProject = () => {
       router.push(`/projects/${project.id}`);
     } catch (error) {
       if (project) {
-        await axios.delete(`${"http://localhost:8000"}/projects/${project.id}`);
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/projects/${project.id}`,
+        );
       }
       throw new SolanaError();
     }

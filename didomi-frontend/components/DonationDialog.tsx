@@ -132,7 +132,7 @@ const DonationDialog = ({ project }: { project: any }) => {
         })
         .rpc();
       // Creat Donation in Backend
-      await axios.post("http://localhost:8000/donation", {
+      await axios.post(`${process.NEXT_PUBLIC_API_URL}/donation`, {
         amount: data.amount,
         tokenType: "SOL",
         donorAddress: provider.publicKey.toString(),
