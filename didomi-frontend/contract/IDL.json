@@ -1,0 +1,488 @@
+{
+  "address": "SNNuq33tepwjoqeRCj3GcNkW4R4hZF88pNMewZbxWyT",
+  "metadata": {
+    "name": "didomi_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "create_donation",
+      "discriminator": [
+        7,
+        156,
+        37,
+        211,
+        55,
+        14,
+        137,
+        121
+      ],
+      "accounts": [
+        {
+          "name": "donor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "project_owner"
+        },
+        {
+          "name": "project_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "project_owner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  111,
+                  108,
+                  112,
+                  114,
+                  111,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "project_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "project_account.owner_address",
+                "account": "ProjectData"
+              },
+              {
+                "kind": "account",
+                "path": "project_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "token_type",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_project",
+      "discriminator": [
+        148,
+        219,
+        181,
+        42,
+        221,
+        114,
+        145,
+        190
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "project",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  111,
+                  108,
+                  112,
+                  114,
+                  111,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u64"
+        },
+        {
+          "name": "owner_id",
+          "type": "u64"
+        },
+        {
+          "name": "title",
+          "type": {
+            "array": [
+              "u8",
+              64
+            ]
+          }
+        },
+        {
+          "name": "target_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "delete_project",
+      "discriminator": [
+        225,
+        5,
+        3,
+        226,
+        80,
+        93,
+        171,
+        122
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "project",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  111,
+                  108,
+                  112,
+                  114,
+                  111,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_project",
+      "discriminator": [
+        2,
+        196,
+        131,
+        92,
+        28,
+        139,
+        179,
+        94
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "project",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  111,
+                  108,
+                  112,
+                  114,
+                  111,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": {
+            "array": [
+              "u8",
+              64
+            ]
+          }
+        },
+        {
+          "name": "target_amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "EscrowData",
+      "discriminator": [
+        249,
+        142,
+        239,
+        239,
+        106,
+        183,
+        96,
+        92
+      ]
+    },
+    {
+      "name": "ProjectData",
+      "discriminator": [
+        248,
+        128,
+        251,
+        0,
+        71,
+        204,
+        69,
+        32
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "EscrowData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner_id",
+            "docs": [
+              "Owner's id"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "owner_address",
+            "docs": [
+              "Owner's public key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "project_address",
+            "docs": [
+              "Projects's public key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "current_amount",
+            "docs": [
+              "Current amount raised (in lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "_reserve",
+            "docs": [
+              "Reserved space (48 bytes)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                48
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProjectData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "docs": [
+              "Project ID (8)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "title",
+            "docs": [
+              "Project name (64 bytes)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "owner_id",
+            "docs": [
+              "Owner's id"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "owner_address",
+            "docs": [
+              "Owner's public key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "escrow_address",
+            "docs": [
+              "Escrow's public key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "target_amount",
+            "docs": [
+              "Target amount (in lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "current_amount",
+            "docs": [
+              "Current amount raised (in lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "_reserve",
+            "docs": [
+              "Reserved space (96 bytes)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                96
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

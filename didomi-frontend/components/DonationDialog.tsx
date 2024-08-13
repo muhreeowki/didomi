@@ -50,7 +50,7 @@ import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
 import * as web3 from "@solana/web3.js";
 import { DidomiProgram } from "../../didomi-program/target/types/didomi_program";
-import idl from "../../didomi-program/target/idl/didomi_program.json";
+import idl from "@/contract/IDL.json";
 import { useToast } from "./ui/use-toast";
 import SignInButton from "./SignInButton";
 import axios from "axios";
