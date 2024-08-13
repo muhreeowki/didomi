@@ -36,7 +36,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import { DidomiProgram } from "../../didomi-program/target/types/didomi_program";
+import { DidomiProgram } from "@/contract/didomi_program";
 import idl from "@/contract/IDL.json";
 import * as web3 from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";

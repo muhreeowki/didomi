@@ -7,7 +7,7 @@ import axios from "axios";
 import * as anchor from "@coral-xyz/anchor";
 import * as walletAdapterReact from "@solana/wallet-adapter-react";
 import * as web3 from "@solana/web3.js";
-import { DidomiProgram } from "../../../didomi-program/target/types/didomi_program";
+import { DidomiProgram } from "@/contract/didomi_program";
 import idl from "@/contract/IDL.json";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
