@@ -111,10 +111,13 @@ const ProjectEditPage = (props: {
     );
     // 3. Update Project On Backend Server
     const project = await axios
-      .patch(`${process.NEXT_PUBLIC_API_URL}/projects/${props.project.id}`, {
-        ...data,
-        acceptedCoins: [data.acceptedCoins],
-      })
+      .patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/projects/${props.project.id}`,
+        {
+          ...data,
+          acceptedCoins: [data.acceptedCoins],
+        },
+      )
       .then((response) => {
         return response.data;
       })
@@ -157,7 +160,7 @@ const ProjectEditPage = (props: {
       if (project) {
         await axios
           .patch(
-            `${process.NEXT_PUBLIC_API_URL}/projects/${props.project.id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/projects/${props.project.id}`,
             {
               ...project,
             },
