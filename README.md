@@ -19,6 +19,7 @@ Whether you're a creator, entrepreneur, or community organizer, Didomi empowers 
 - Rust
 - Anchor Framework
 - web3-js
+- NestJS
 - NextJS
 - TailwindCSS
 - PostgreSQL
