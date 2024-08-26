@@ -15,7 +15,6 @@ import Navbar from "@/components/Navbar";
 const Home = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
   return (
     <>
       <Navbar />
