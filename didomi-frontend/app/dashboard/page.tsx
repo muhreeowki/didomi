@@ -11,8 +11,8 @@ import { DidomiProgram } from "@/contract/didomi_program";
 import idl from "@/contract/IDL.json";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import getDonations from "@/hooks/getDonations";
-import getUserProjects from "@/hooks/getUserProjects";
+import getDonations from "@/actions/getDonations";
+import getUserProjects from "@/actions/getUserProjects";
 
 const ProjectDashboardPage = async ({}) => {
   // Solana State Config

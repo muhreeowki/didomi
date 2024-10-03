@@ -1,3 +1,5 @@
+"use server";
+
 import { BackendError } from "@/lib/exceptions";
 import axios from "axios";
 

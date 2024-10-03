@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import getUserProjects from "@/hooks/getUserProjects";
+import getUserProjects from "@/actions/getUserProjects";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import ProjectThumbnail from "./ProjectThumbnail";
 
