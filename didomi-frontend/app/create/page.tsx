@@ -183,6 +183,7 @@ const CreateProject = () => {
         return response.data;
       })
       .catch((err) => {
+        console.log(err);
         throw new BackendError();
       });
 
@@ -221,6 +222,7 @@ const CreateProject = () => {
       console.log(tx);
       router.push(`/projects/${project.id}`);
     } catch (error) {
+      console.log("Delete Project");
       if (project) {
         await axios.delete(
           `${process.env.NEXT_PUBLIC_API_URL}/projects/${project.id}`,
