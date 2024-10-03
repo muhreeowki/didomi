@@ -222,6 +222,7 @@ const CreateProject = () => {
       console.log(tx);
       router.push(`/projects/${project.id}`);
     } catch (error) {
+      console.log(error);
       console.log("Delete Project");
       if (project) {
         await axios.delete(
